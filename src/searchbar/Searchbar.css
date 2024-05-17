@@ -2,7 +2,6 @@
   width: 100%;
   display: flex;
   align-items: center;
-  border: 1px solid #4CAF50
 }
 
 .vite-logo {
@@ -26,8 +25,20 @@
 }
 
 .search-input {
-  height: 2em;
-  width: 100%;
-  padding: 1em 1em 1em 2em;
-  box-sizing: border-box;
+  /*width: 100%;*/
+  /*padding: 1em 1em 1em 2em;*/
+  /*box-sizing: border-box;*/
+  height: 0.75rem;
+  margin-left: 0.6rem;
+  border: solid #b9b9b9;
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+
+
+
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-size:1rem;
 }

@@ -1,9 +1,7 @@
 .chip {
-  position: relative;
-  background: #f0f0f0;
-  border: solid transparent;
+  border: solid #b9b9b9;
   margin-left: 0.6rem;
-  padding: 0.25rem;
+  padding: 0 0.25rem;
   border-radius: 6px;
 }
 

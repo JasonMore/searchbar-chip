@@ -39,16 +39,16 @@ export const Searchbar = () => {
 
         </div>
 
-        {/*<input*/}
-        {/*  ref={inputRef}*/}
-        {/*  className="search-input"*/}
-        {/*  type="text"*/}
-        {/*  value={currentInput}*/}
-        {/*  onChange={(event) => setCurrentInput(event.target.value)}*/}
-        {/*  onKeyDown={onKeyDown}*/}
-        {/*  placeholder="Filter"*/}
-        {/*  autoComplete="off"*/}
-        {/*/>*/}
+        <input
+          ref={inputRef}
+          className="search-input"
+          type="text"
+          value={currentInput}
+          onChange={(event) => setCurrentInput(event.target.value)}
+          onKeyDown={onKeyDown}
+          placeholder=""
+          autoComplete="off"
+        />
       </div>
     </div>
   );
