@@ -6,7 +6,7 @@ import { Chip } from "./Chip.tsx";
 export const Searchbar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [currentInput, setCurrentInput] = useState("");
-  const [inputVisible, setInputVisible] = useState(true);
+  const [inputVisible, setInputVisible] = useState(false);
 
   const [tokens, setTokens] = useState<Token[]>([
     { text: "foo:bar", field: "foo", operator: "equals", value: "bar" },
@@ -26,13 +26,26 @@ export const Searchbar = () => {
 
   const tokenizeInput = (textContent: string) => {
     const match = textContent.match(/(\w+):(\w+)/gi);
-    if(match?.[0]){
-      const text = match[0]
-      const field = match[1]
-      const operator = "equals"
-      const value = match[2]
-      setTokens(tokens.concat({text, field, operator, value}))
+    if (!match?.[0]) {
+      setTokens(
+        tokens.concat({
+          text: textContent,
+          field: "",
+          operator: "unknown",
+          value: "",
+        }),
+      );
+      return;
     }
+
+    setTokens(
+      tokens.concat({
+        text: textContent,
+        field: match[1],
+        operator: "equals",
+        value: match[2],
+      }),
+    );
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
