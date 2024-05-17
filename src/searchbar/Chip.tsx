@@ -6,8 +6,9 @@ type Props = {
 };
 
 export const Chip = ({ token }: Props) => {
+  const valid = token.operator != "unknown";
   return (
-    <div className="chip">
+    <div className={`chip ${valid ? "chip-valid" : ""}`}>
       <span className="chip-text">{token.text}</span>
       <span className="chip-remove">X</span>
     </div>

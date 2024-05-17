@@ -1,6 +1,6 @@
 export type Token = {
   text: string;
   field: string;
-  operator: "=";
+  operator: "equals" | "unknown";
   value: string;
 }
