@@ -9,6 +9,7 @@ export const Searchbar = () => {
   const [inputVisible, setInputVisible] = useState(false);
 
   const [tokens, setTokens] = useState<Token[]>([
+    // mock tokens
     { text: "foo:bar", field: "foo", operator: "equals", value: "bar" },
     {
       text: "Stage:Contacted",
