@@ -1,5 +1,5 @@
-const react = require("eslint-plugin-react");
-const globals = require("globals");
+import react from "eslint-plugin-react";
+import globals from "globals";
 
 module.exports = [
   {
