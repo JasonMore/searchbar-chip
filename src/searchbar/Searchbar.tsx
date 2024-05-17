@@ -26,8 +26,6 @@ export const Searchbar = () => {
 
   return (
     <div className="searchbar-container">
-      <img src={viteLogo} className="vite-logo" alt="Vite logo" />
-
       <div className="search-box">
         <img src={searchIcon} className="search-icon" alt="Vite logo" />
 

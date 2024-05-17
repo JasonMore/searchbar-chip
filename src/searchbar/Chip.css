@@ -1,32 +1,39 @@
 .chip {
+  display: flex;
+  flex-direction: row;
   border: solid #b9b9b9;
   margin-left: 0.6rem;
-  padding: 0 0.25rem;
   border-radius: 6px;
 }
 
 .chip-text {
+  margin: 0 0.25rem;
   font-family: "Rubik", sans-serif;
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
 }
 
-.chip:hover {
-  border: solid #b9b9b9;
-}
+/*.chip:hover {*/
+/*  border: solid #b9b9b9;*/
+/*}*/
 
-.chip:hover > .chip-remove {
-  display: block;
-}
+/*.chip:hover > .chip-remove {*/
+/*  display: block;*/
+/*}*/
 
 .chip-remove {
-  display: none;
-  position: absolute;
+  display: flex;
+  align-items: center;
+  margin: 0 0;
+  /*display: none;*/
+  /*position: absolute;*/
   padding: 0.25rem 0.5rem;
-  right: -1.7rem;
-  top: 0;
+  /*right: -1.7rem;*/
+  /*top: 0;*/
   background: #b9b9b9;
-  z-index: 100;
+  /*z-index: 100;*/
   cursor: pointer;
+  height: 1rem;
+  width: 0.5rem;
 }
