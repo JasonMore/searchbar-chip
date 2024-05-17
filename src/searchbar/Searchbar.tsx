@@ -1,6 +1,4 @@
 import { KeyboardEventHandler, useRef, useState } from "react";
-import viteLogo from "/vite.svg";
-import searchIcon from "/search.svg";
 import "./Searchbar.css";
 import type {Token} from './types.ts'
 import { Chip } from "./Chip.tsx";
@@ -27,7 +25,7 @@ export const Searchbar = () => {
   return (
     <div className="searchbar-container">
       <div className="search-box">
-        <img src={searchIcon} className="search-icon" alt="Vite logo" />
+        <span className="search-icon">🔍</span>
 
         {tokens.map((token) => (
           <Chip key={token.text} token={token} />

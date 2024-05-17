@@ -5,7 +5,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>Searchbar Chip</h1>
+      <h1>🌟Searchbar Chip 🌟</h1>
       <Searchbar />
     </div>
   );
