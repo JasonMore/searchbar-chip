@@ -25,7 +25,14 @@ export const Searchbar = () => {
   ]);
 
   const tokenizeInput = (textContent: string) => {
-    console.log(">>> textContent", textContent);
+    const match = textContent.match(/(\w+):(\w+)/gi);
+    if(match?.[0]){
+      const text = match[0]
+      const field = match[1]
+      const operator = "equals"
+      const value = match[2]
+      setTokens(tokens.concat({text, field, operator, value}))
+    }
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -42,9 +49,9 @@ export const Searchbar = () => {
     setCurrentInput("");
 
     // I can't remember why this needs a setTimeout to work. Rendering order?
-    setTimeout(() =>{
+    setTimeout(() => {
       inputRef?.current?.focus();
-    })
+    });
   };
 
   return (
