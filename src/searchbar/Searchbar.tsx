@@ -12,6 +12,7 @@ export const Searchbar = () => {
 
   const [tokens, setTokens] = useState<Token[]>([
     { text: "foo:bar", field: "foo", operator: "=", value: "bar" },
+    { text: "Stage:Contacted", field: "Stage", operator: "=", value: "Contacted" },
   ]);
 
   const tokenizeInput = (textContent: string) => {

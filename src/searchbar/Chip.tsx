@@ -2,10 +2,14 @@ import "./Chip.css";
 import type { Token } from "./types.ts";
 
 type Props = {
-  token: Token
-}
+  token: Token;
+};
 
-
-export const Chip = ({token}:Props) =>{
-  return <span className="chip">{token.text}</span>
-}
+export const Chip = ({ token }: Props) => {
+  return (
+    <div className="chip">
+      <span className="chip-text">{token.text}</span>
+      <span className="chip-remove">X</span>
+    </div>
+  );
+};
