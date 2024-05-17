@@ -1,0 +1,9 @@
+.chip {
+    background: #f0f0f0;
+    margin-left: 0.5rem;
+    padding: 0.25rem;
+    border-radius: 6px;
+
+    /*position: absolute;*/
+
+}

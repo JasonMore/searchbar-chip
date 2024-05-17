@@ -1,28 +1,26 @@
-import { useState } from "react";
+import { KeyboardEventHandler, useRef, useState } from "react";
 import viteLogo from "/vite.svg";
 import searchIcon from "/search.svg";
 import "./Searchbar.css";
+import type {Token} from './types.ts'
+import { Chip } from "./Chip.tsx";
+
 
 export const Searchbar = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [currentInput, setCurrentInput] = useState("");
-  const [tokens, setTokens] = useState([]);
 
-  const handleInputChange = (event: Event) => {
-    setCurrentInput(event.target.value);
+  const [tokens, setTokens] = useState<Token[]>([
+    { text: "foo:bar", field: "foo", operator: "=", value: "bar" },
+  ]);
+
+  const tokenizeInput = (textContent: string) => {
+    console.log(">>> textContent", textContent);
   };
 
-  const tokenizeInput = () => {
-    if (currentInput.trim()) {
-      setTokens([...tokens, currentInput.trim()]);
-      setCurrentInput("");
-    }
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter" || event.key === ",") {
-      event.preventDefault();
-      tokenizeInput();
-    }
+  const onKeyDown = (event: KeyboardEventHandler<HTMLInputElement>) => {
+    // console.log(event)
+    tokenizeInput(event.currentTarget.value);
   };
 
   return (
@@ -32,22 +30,24 @@ export const Searchbar = () => {
       <div className="search-box">
         <img src={searchIcon} className="search-icon" alt="Vite logo" />
 
-        <input
-          className="search-input"
-          type="text"
-          value={currentInput}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Filter"
-          autoComplete="off"
-        />
-      </div>
-      <div>
-        {tokens.map((token, index) => (
-          <span key={index} className="token">
-            {token}
-          </span>
+        {tokens.map((token) => (
+          <Chip key={token.text} token={token} />
         ))}
+
+        <div className="search-content">
+
+        </div>
+
+        {/*<input*/}
+        {/*  ref={inputRef}*/}
+        {/*  className="search-input"*/}
+        {/*  type="text"*/}
+        {/*  value={currentInput}*/}
+        {/*  onChange={(event) => setCurrentInput(event.target.value)}*/}
+        {/*  onKeyDown={onKeyDown}*/}
+        {/*  placeholder="Filter"*/}
+        {/*  autoComplete="off"*/}
+        {/*/>*/}
       </div>
     </div>
   );
