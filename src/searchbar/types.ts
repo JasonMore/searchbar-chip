@@ -1,7 +1,9 @@
+export type FieldType = "unknown" | "string" | "date" | "number" | "boolean";
+
 export type Token = {
   text: string;
   field: string;
-  type: "unknown" | "string" | "date" | "number" | "boolean";
+  type: FieldType
   operator: "unknown" | "equals" | "wildcard";
   value: string;
 };

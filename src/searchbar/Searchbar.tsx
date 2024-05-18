@@ -35,7 +35,7 @@ export const Searchbar = () => {
   ]);
 
   const tokenizeInput = (textContent: string) => {
-    setTokens(tokens.concat(tokenize(textContent)));
+    setTokens(tokens.concat(tokenize(textContent, "string")));
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {

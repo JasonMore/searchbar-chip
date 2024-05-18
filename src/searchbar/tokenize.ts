@@ -1,8 +1,17 @@
-import { Token } from "./types";
+import { FieldType, Token } from "./types";
 
-export const tokenize = (textContent: string): Token => {
-  const match = /(\w+):(\w+)/gi.exec(textContent);
-  if (!match?.[0]) {
+const operatorMap = {
+  "-": "negate",
+  "<": "lessThan",
+  ">": "moreThan",
+  "": "equals",
+};
+
+export const tokenize = (textContent: string, fieldType: FieldType): Token => {
+  const match = /(?<field>\w+):(?<operator>[-<>]?)(?<value>\w+)/gi.exec(
+    textContent,
+  );
+  if (!match) {
     return {
       text: textContent,
       field: "",
@@ -12,11 +21,14 @@ export const tokenize = (textContent: string): Token => {
     };
   }
 
+  // TODO: check type with type predicate https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates
+  const operator = operatorMap[match.groups?.operator ?? ""];
+
   return {
     text: textContent,
-    field: match[1],
-    type: "unknown",
-    operator: "equals",
-    value: match[2],
+    field: match.groups?.field ?? "--missing field--",
+    type: "string",
+    operator,
+    value: match.groups?.value ?? "--missing value",
   };
 };
