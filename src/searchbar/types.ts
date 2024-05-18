@@ -1,6 +1,7 @@
 export type Token = {
   text: string;
   field: string;
-  operator: "equals" | "unknown";
+  type: "unknown" | "string" | "date" | "number" | "boolean";
+  operator: "unknown" | "equals" | "wildcard";
   value: string;
-}
+};

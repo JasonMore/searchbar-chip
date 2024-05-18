@@ -2,6 +2,7 @@ import { KeyboardEvent, useRef, useState } from "react";
 import "./Searchbar.css";
 import type { Token } from "./types.ts";
 import { Chip } from "./Chip.tsx";
+import { tokenize } from "./tokenize.ts";
 
 export const Searchbar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -10,43 +11,31 @@ export const Searchbar = () => {
 
   const [tokens, setTokens] = useState<Token[]>([
     // mock tokens
-    { text: "foo:bar", field: "foo", operator: "equals", value: "bar" },
     {
       text: "Stage:Contacted",
       field: "Stage",
+      type: "string",
       operator: "equals",
       value: "Contacted",
     },
     {
+      text: "Name:Jason*",
+      field: "Name",
+      type: "string",
+      operator: "wildcard",
+      value: "Jason*",
+    },
+    {
       text: "foo",
       field: "",
+      type: "unknown",
       operator: "unknown",
       value: "",
     },
   ]);
 
   const tokenizeInput = (textContent: string) => {
-    const match = textContent.match(/(\w+):(\w+)/gi);
-    if (!match?.[0]) {
-      setTokens(
-        tokens.concat({
-          text: textContent,
-          field: "",
-          operator: "unknown",
-          value: "",
-        }),
-      );
-      return;
-    }
-
-    setTokens(
-      tokens.concat({
-        text: textContent,
-        field: match[1],
-        operator: "equals",
-        value: match[2],
-      }),
-    );
+    setTokens(tokens.concat(tokenize(textContent)));
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -92,6 +81,8 @@ export const Searchbar = () => {
           />
         )}
       </div>
+      output would be sent to the table filtering
+      <pre>{JSON.stringify(tokens, null, 2)}</pre>
     </div>
   );
 };
