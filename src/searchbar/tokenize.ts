@@ -15,7 +15,7 @@ export const tokenize = (textContent: string, fieldType: FieldType): Token => {
     return {
       text: textContent,
       field: "",
-      type: "string",
+      type: fieldType,
       operator: "unknown",
       value: "",
     };
@@ -27,7 +27,7 @@ export const tokenize = (textContent: string, fieldType: FieldType): Token => {
   return {
     text: textContent,
     field: match.groups?.field ?? "--missing field--",
-    type: "string",
+    type: fieldType,
     operator,
     value: match.groups?.value ?? "--missing value",
   };
