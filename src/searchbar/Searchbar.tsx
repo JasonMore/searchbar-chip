@@ -174,7 +174,7 @@ export const Searchbar = () => {
       return;
     }
 
-    resetOptions()
+    resetOptions();
 
     // I can't remember why this needs a setTimeout to work. Rendering order?
     setTimeout(() => {
@@ -199,6 +199,7 @@ export const Searchbar = () => {
 
         {setSelectingOption !== null && options && (
           <>
+            <div className="selecting-mask" onClick={closeOptions}></div>
             <input
               ref={inputRef}
               className="search-input"

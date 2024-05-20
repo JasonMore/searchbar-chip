@@ -32,4 +32,17 @@
   font-weight: 500;
   font-style: normal;
   font-size:1rem;
+
+  /* push it above the click mask */
+  z-index: 10;
+}
+
+
+.selecting-mask{
+  position: fixed;
+  background-color: transparent;
+  top: 0;
+  left: 0;
+  height: 100vw;
+  width: 100vh;
 }
