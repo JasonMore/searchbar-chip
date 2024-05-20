@@ -1,59 +1,21 @@
 import { KeyboardEvent, MouseEventHandler, useRef, useState } from "react";
 import "./Searchbar.css";
-import { Field, SearchOptions, Token } from "./types.ts";
+import { SearchOptions, Token } from "./types.ts";
 import { Chip } from "./Chip.tsx";
 import { parseTextContent, tokenize } from "./tokenize.ts";
 import { SearchBarOptions } from "./SearchBarOptions.tsx";
-
-const mockSetTokens: Token[] = [
-  {
-    text: "Stage:Contacted",
-    field: "Stage",
-    type: "string",
-    operator: ":",
-    value: "Contacted",
-  },
-  {
-    text: "Name:-Jason",
-    field: "Name",
-    type: "string",
-    operator: ":",
-    value: "Jason*",
-  },
-  {
-    text: "foo",
-    field: "",
-    type: "unknown",
-    operator: "unknown",
-    value: "",
-  },
-];
-
-const mockFields = {
-  Stage: { type: "string" },
-  PatientsReferred: { type: "number" },
-  "Date of Last Interaction": { type: "date" },
-};
-
-const mockFieldOptions = [
-  { name: "Stage", type: "string" },
-  { name: "PatientsReferred", type: "number" },
-  { name: "Date of Last Interaction", type: "date" },
-];
+import {
+  mockFieldOptions,
+  mockFields,
+  mockSetTokens,
+  mockValueOptions,
+} from "./searchbarMockData.ts";
 
 const operators = [
   { name: ":-", description: "Not - do not include" },
   { name: ":<", description: "Less Than - values below or earlier than" },
   { name: ":>", description: "Greater Than - values above or later than" },
   { name: ":", description: "Equals - exactly this value" },
-];
-
-const mockValueOptions = [
-  { name: "Lead", type: "string" },
-  { name: "Demo", type: "string" },
-  { name: "Negotiating", type: "string" },
-  { name: "Closed-Won", type: "string" },
-  { name: "Closed-Lost", type: "string" },
 ];
 
 export const Searchbar = () => {
