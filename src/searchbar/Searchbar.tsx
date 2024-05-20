@@ -77,7 +77,7 @@ export const Searchbar = () => {
 
     if (selectingOption === "value") {
       // no return, as if selecting final value, assume they also want to immediately tokenize
-      const textContent = `${partialToken.field}${partialToken.operator}${values[selectedFieldIndex].name}`;
+      const textContent = `${partialToken.field}${partialToken.operator}${values[optionIndex].name}`;
       tokenizeInput(textContent);
       closeOptions();
     }
