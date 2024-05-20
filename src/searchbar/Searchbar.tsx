@@ -5,7 +5,7 @@ import { Chip } from "./Chip.tsx";
 import { parseTextContent, tokenize } from "./tokenize.ts";
 import { SearchBarOptions } from "./SearchBarOptions.tsx";
 
-const mockSetTokens = [
+const mockSetTokens: Token[] = [
   {
     text: "Stage:Contacted",
     field: "Stage",
@@ -42,9 +42,9 @@ const mockFieldOptions = [
 ];
 
 const operators = [
-  { name: "-", description: "Not - do not include" },
-  { name: "<", description: "Less Than - values below or earlier than" },
-  { name: ">", description: "Greater Than - values above or later than" },
+  { name: ":-", description: "Not - do not include" },
+  { name: ":<", description: "Less Than - values below or earlier than" },
+  { name: ":>", description: "Greater Than - values above or later than" },
   { name: ":", description: "Equals - exactly this value" },
 ];
 
@@ -83,6 +83,18 @@ export const Searchbar = () => {
     selectingOption
   ];
 
+  const closeOptions = () => {
+    setSelectedFieldIndex(null);
+    setSelectingOption(null);
+    setCurrentInput("");
+  };
+
+  const resetOptions = () => {
+    setSelectedFieldIndex(null);
+    setSelectingOption("field");
+    setCurrentInput("");
+  };
+
   const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
     let textContent = event.currentTarget.value;
     const partialToken = parseTextContent(textContent);
@@ -94,14 +106,14 @@ export const Searchbar = () => {
       if (selectedFieldIndex !== null) {
         if (selectingOption === "field") {
           setSelectedFieldIndex(null);
-          setSelectingOption('operator')
+          setSelectingOption("operator");
           setCurrentInput(`${fields[selectedFieldIndex].name}`);
           return;
         }
 
         if (selectingOption === "operator") {
           setSelectedFieldIndex(null);
-          setSelectingOption('value')
+          setSelectingOption("value");
           setCurrentInput(
             `${partialToken.field}${operators[selectedFieldIndex].name}`,
           );
@@ -116,7 +128,7 @@ export const Searchbar = () => {
 
       // dropdown not active, user intends to set value
       tokenizeInput(textContent);
-      setSelectingOption(null);
+      closeOptions();
     }
 
     const endOfList = options?.length - 1;
@@ -158,12 +170,11 @@ export const Searchbar = () => {
     if (event?.target !== searchBoxRef.current) return;
 
     if (selectingOption) {
-      setSelectingOption(null);
+      closeOptions();
       return;
     }
 
-    setSelectingOption("field");
-    setCurrentInput("");
+    resetOptions()
 
     // I can't remember why this needs a setTimeout to work. Rendering order?
     setTimeout(() => {
