@@ -46,3 +46,9 @@
   height: 100vw;
   width: 100vh;
 }
+
+.searchbar-help{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

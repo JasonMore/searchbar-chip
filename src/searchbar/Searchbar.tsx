@@ -187,8 +187,10 @@ export const Searchbar = () => {
           </>
         )}
       </div>
-      output would be sent to the table filtering
-      <pre>{JSON.stringify(tokens, null, 2)}</pre>
+      <p>
+        <h2>output would be sent to the table filtering</h2>
+        <pre>{JSON.stringify(tokens, null, 2)}</pre>
+      </p>
     </div>
   );
 };
