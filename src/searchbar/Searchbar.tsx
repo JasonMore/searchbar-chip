@@ -57,6 +57,32 @@ export const Searchbar = () => {
     setCurrentInput("");
   };
 
+  const optionSelected = (
+    partialToken: Partial<Token>,
+    optionIndex: number,
+  ) => {
+    if (selectingOption === "field") {
+      setSelectedFieldIndex(null);
+      setSelectingOption("operator");
+      setCurrentInput(`${fields[optionIndex].name}`);
+      return;
+    }
+
+    if (selectingOption === "operator") {
+      setSelectedFieldIndex(null);
+      setSelectingOption("value");
+      setCurrentInput(`${partialToken.field}${operators[optionIndex].name}`);
+      return;
+    }
+
+    if (selectingOption === "value") {
+      // no return, as if selecting final value, assume they also want to immediately tokenize
+      const textContent = `${partialToken.field}${partialToken.operator}${values[selectedFieldIndex].name}`;
+      tokenizeInput(textContent);
+      closeOptions();
+    }
+  };
+
   const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
     let textContent = event.currentTarget.value;
     const partialToken = parseTextContent(textContent);
@@ -127,6 +153,10 @@ export const Searchbar = () => {
     }
   };
 
+  const onOptionClicked = (optionIndex: number) => {
+    optionSelected(parseTextContent(currentInput), optionIndex);
+  };
+
   const containerClick: MouseEventHandler<HTMLDivElement> = (event) => {
     // ignore clicks from other elements on top
     if (event?.target !== searchBoxRef.current) return;
@@ -170,6 +200,7 @@ export const Searchbar = () => {
             <SearchBarOptions
               options={options}
               selectedFieldIndex={selectedFieldIndex}
+              onOptionClicked={onOptionClicked}
             />
           </>
         )}
