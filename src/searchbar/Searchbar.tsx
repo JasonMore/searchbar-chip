@@ -84,7 +84,7 @@ export const Searchbar = () => {
   };
 
   const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
-    let textContent = event.currentTarget.value;
+    const textContent = event.currentTarget.value;
     const partialToken = parseTextContent(textContent);
 
     if (event.key === "Enter") {
@@ -92,26 +92,8 @@ export const Searchbar = () => {
 
       // replace field or value
       if (selectedFieldIndex !== null) {
-        if (selectingOption === "field") {
-          setSelectedFieldIndex(null);
-          setSelectingOption("operator");
-          setCurrentInput(`${fields[selectedFieldIndex].name}`);
-          return;
-        }
-
-        if (selectingOption === "operator") {
-          setSelectedFieldIndex(null);
-          setSelectingOption("value");
-          setCurrentInput(
-            `${partialToken.field}${operators[selectedFieldIndex].name}`,
-          );
-          return;
-        }
-
-        if (selectingOption === "value") {
-          // no return, as if selecting final value, assume they also want to immediately tokenize
-          textContent = `${partialToken.field}${partialToken.operator}${values[selectedFieldIndex].name}`;
-        }
+        optionSelected(partialToken, selectedFieldIndex);
+        return;
       }
 
       // dropdown not active, user intends to set value
