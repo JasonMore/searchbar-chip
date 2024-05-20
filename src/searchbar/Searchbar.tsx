@@ -41,9 +41,9 @@ export const Searchbar = () => {
   };
 
   // the current list of options to show in the dropdown
-  const options = { field: fields, operator: operators, value: values }[
-    selectingOption
-  ];
+  const options = selectingOption
+    ? { field: fields, operator: operators, value: values }[selectingOption]
+    : [];
 
   const closeOptions = () => {
     setSelectedFieldIndex(null);
@@ -184,7 +184,7 @@ export const Searchbar = () => {
 
         <div className="search-content"></div>
 
-        {setSelectingOption !== null && options && (
+        {selectingOption !== null && (
           <>
             <div className="search-click-mask" onClick={closeOptions} />
             <input
