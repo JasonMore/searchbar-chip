@@ -2,7 +2,7 @@ import { KeyboardEvent, useRef, useState } from "react";
 import "./Searchbar.css";
 import type { Field, Token } from "./types.ts";
 import { Chip } from "./Chip.tsx";
-import { tokenize } from "./tokenize.ts";
+import { parseTextContent, tokenize } from "./tokenize.ts";
 import { SearchBarOptions } from "./SearchBarOptions.tsx";
 
 export const Searchbar = () => {
@@ -38,6 +38,7 @@ export const Searchbar = () => {
     },
   ]);
 
+  // TODO: Populated by parsing table data
   const [fields, setFields] = useState<Field[]>([
     { name: "Stage", type: "string" },
     { name: "PatientsReferred", type: "number" },
@@ -50,22 +51,42 @@ export const Searchbar = () => {
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
+      event.preventDefault();
+
+      // replace field or value
+      if(selectedFieldIndex !== null){
+        const partialToken = parseTextContent(event.currentTarget.value)
+        if(true /*selectingField*/){
+          setCurrentInput(`${fields[selectedFieldIndex].name}:`)
+          return;
+        }
+      }
+
+      // dropdown not active, user intends to filter
       tokenizeInput(event.currentTarget.value);
       setInputVisible(false);
-      event.preventDefault();
     }
+
+    const endOfList = fields.length - 1;
 
     if (event.key === "ArrowDown") {
       event.preventDefault();
 
-      if (
-        selectedFieldIndex === null ||
-        selectedFieldIndex === fields.length - 1 // end of list
-      ) {
+      if (selectedFieldIndex === null || selectedFieldIndex === endOfList) {
         return setSelectedFieldIndex(0);
       }
 
       setSelectedFieldIndex(selectedFieldIndex + 1);
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+
+      if (selectedFieldIndex === null || selectedFieldIndex === 0) {
+        return setSelectedFieldIndex(endOfList);
+      }
+
+      setSelectedFieldIndex(selectedFieldIndex - 1);
     }
   };
 
