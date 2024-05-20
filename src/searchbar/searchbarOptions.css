@@ -14,7 +14,12 @@
 }
 
 .search-row {
-  padding: 0.5rem;
+  padding: 0.75rem;
+}
+
+.search-row:hover {
+  background-color: #eeeeee;
+  cursor: pointer;
 }
 
 .search-selected {
