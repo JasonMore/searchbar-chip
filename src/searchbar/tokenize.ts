@@ -1,12 +1,5 @@
 import { FieldType, Token } from "./types";
 
-const operatorMap = {
-  ":-": "negate",
-  ":<": "lessThan",
-  ":>": "moreThan",
-  ":": "equals",
-};
-
 export const parseTextContent = (textContent: string): Partial<Token> => {
   const match = /(?<field>\w+)?(?<operator>:[-<>]?)?(?<value>\w+)?/gi.exec(
     textContent,
@@ -16,9 +9,7 @@ export const parseTextContent = (textContent: string): Partial<Token> => {
     text: textContent,
     field: match?.groups?.field,
     // TODO: check type with type predicate https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates
-    operator: match?.groups?.operator
-      ? operatorMap[match?.groups?.operator]
-      : undefined,
+    operator: match?.groups?.operator,
     value: match?.groups?.value,
   };
 };

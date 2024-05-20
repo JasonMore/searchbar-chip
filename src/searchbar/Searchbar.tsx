@@ -79,8 +79,15 @@ export const Searchbar = () => {
     setTokens(tokens.concat(tokenize(textContent, "string")));
   };
 
+  // the current list of options to show in the dropdown
+  const options = { field: fields, operator: operators, value: values }[
+    selectingOption
+  ];
+
   const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
     const textContent = event.currentTarget.value;
+    const partialToken = parseTextContent(textContent);
+
     if (event.key === "Enter") {
       event.preventDefault();
 
@@ -93,10 +100,18 @@ export const Searchbar = () => {
         }
 
         if (selectingOption === "operator") {
+          setSelectedFieldIndex(null);
+          setCurrentInput(
+            `${partialToken.field}${operators[selectedFieldIndex].name}`,
+          );
           return;
         }
 
         if (selectingOption === "value") {
+          setSelectedFieldIndex(null);
+          setCurrentInput(
+            `${partialToken.field}${partialToken.operator}${values[selectedFieldIndex].name}`,
+          );
           return;
         }
       }
@@ -106,7 +121,7 @@ export const Searchbar = () => {
       setInputVisible(false);
     }
 
-    const endOfList = fields?.length - 1;
+    const endOfList = options?.length - 1;
 
     if (event.key === "ArrowDown") {
       event.preventDefault();
@@ -127,8 +142,6 @@ export const Searchbar = () => {
 
       setSelectedFieldIndex(selectedFieldIndex - 1);
     }
-
-    const partialToken = parseTextContent(textContent);
 
     if (partialToken.field && mockFields[partialToken.field]) {
       // user has a real field set
@@ -152,12 +165,6 @@ export const Searchbar = () => {
     setTimeout(() => {
       inputRef?.current?.focus();
     });
-  };
-
-  const optionsToShow = {
-    field: fields,
-    operator: operators,
-    value: values,
   };
 
   return (
@@ -185,7 +192,7 @@ export const Searchbar = () => {
         )}
         {selectingOption && (
           <SearchBarOptions
-            options={optionsToShow[selectingOption]}
+            options={options}
             selectedFieldIndex={selectedFieldIndex}
           />
         )}

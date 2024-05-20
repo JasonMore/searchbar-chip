@@ -15,6 +15,6 @@ export type Token = {
   text: string;
   field: string;
   type: FieldType
-  operator: "unknown" | "equals" | "wildcard";
+  operator: ":" | ":-" | ":<" | ":>"
   value: string;
 };
