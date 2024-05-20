@@ -1,9 +1,38 @@
 import { KeyboardEvent, useRef, useState } from "react";
 import "./Searchbar.css";
-import type { Field, Token } from "./types.ts";
+import { Field, SearchOptions, Token } from "./types.ts";
 import { Chip } from "./Chip.tsx";
 import { parseTextContent, tokenize } from "./tokenize.ts";
 import { SearchBarOptions } from "./SearchBarOptions.tsx";
+
+const mockSetTokens = [];
+
+const mockFields = {
+  Stage: { type: "string" },
+  PatientsReferred: { type: "number" },
+  "Date of Last Interaction": { type: "date" },
+};
+
+const mockFieldOptions = [
+  { name: "Stage", type: "string" },
+  { name: "PatientsReferred", type: "number" },
+  { name: "Date of Last Interaction", type: "date" },
+];
+
+const operators = [
+  { name: "-", description: "Not - do not include" },
+  { name: "<", description: "Less Than - values below or earlier than" },
+  { name: ">", description: "Greater Than - values above or later than" },
+  { name: ":", description: "Equals - exactly this value" },
+];
+
+const mockValueOptions = [
+  { name: "Lead", type: "string" },
+  { name: "Demo", type: "string" },
+  { name: "Negotiating", type: "string" },
+  { name: "Closed-Won", type: "string" },
+  { name: "Closed-Lost", type: "string" },
+];
 
 export const Searchbar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -12,6 +41,10 @@ export const Searchbar = () => {
   const [selectedFieldIndex, setSelectedFieldIndex] = useState<null | number>(
     null,
   );
+
+  const [selectingOption, setSelectingOption] = useState<
+    null | "field" | "operator" | "value"
+  >(null);
 
   const [tokens, setTokens] = useState<Token[]>([
     // mock tokens
@@ -39,35 +72,41 @@ export const Searchbar = () => {
   ]);
 
   // TODO: Populated by parsing table data
-  const [fields, setFields] = useState<Field[]>([
-    { name: "Stage", type: "string" },
-    { name: "PatientsReferred", type: "number" },
-    { name: "Date of Last Interaction", type: "date" },
-  ]);
+  const [fields, setFields] = useState<SearchOptions[]>(mockFieldOptions);
+  const [values, setValues] = useState<SearchOptions[]>(mockValueOptions);
 
   const tokenizeInput = (textContent: string) => {
     setTokens(tokens.concat(tokenize(textContent, "string")));
   };
 
-  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+  const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
+    const textContent = event.currentTarget.value;
     if (event.key === "Enter") {
       event.preventDefault();
 
       // replace field or value
-      if(selectedFieldIndex !== null){
-        const partialToken = parseTextContent(event.currentTarget.value)
-        if(true /*selectingField*/){
-          setCurrentInput(`${fields[selectedFieldIndex].name}:`)
+      if (selectedFieldIndex !== null) {
+        if (selectingOption === "field") {
+          setSelectedFieldIndex(null);
+          setCurrentInput(`${fields[selectedFieldIndex].name}:`);
+          return;
+        }
+
+        if (selectingOption === "operator") {
+          return;
+        }
+
+        if (selectingOption === "value") {
           return;
         }
       }
 
-      // dropdown not active, user intends to filter
-      tokenizeInput(event.currentTarget.value);
+      // dropdown not active, user intends to set value
+      tokenizeInput(textContent);
       setInputVisible(false);
     }
 
-    const endOfList = fields.length - 1;
+    const endOfList = fields?.length - 1;
 
     if (event.key === "ArrowDown") {
       event.preventDefault();
@@ -88,11 +127,25 @@ export const Searchbar = () => {
 
       setSelectedFieldIndex(selectedFieldIndex - 1);
     }
+
+    const partialToken = parseTextContent(textContent);
+
+    if (partialToken.field && mockFields[partialToken.field]) {
+      // user has a real field set
+      if (partialToken.operator) {
+        setSelectingOption("value");
+      } else {
+        setSelectingOption("operator");
+      }
+    } else {
+      setSelectingOption("field");
+    }
   };
 
   const showInput = () => {
     if (inputVisible) return;
     setInputVisible(true);
+    setSelectingOption("field");
     setCurrentInput("");
 
     // I can't remember why this needs a setTimeout to work. Rendering order?
@@ -101,12 +154,16 @@ export const Searchbar = () => {
     });
   };
 
+  const optionsToShow = {
+    field: fields,
+    operator: operators,
+    value: values,
+  };
+
   return (
     <div className="searchbar-container" onClick={showInput}>
       <div className="search-box">
-        <span className="search-icon">
-          🔍{fields.length} {selectedFieldIndex ?? "x"}
-        </span>
+        <span className="search-icon">🔍</span>
 
         {tokens.map((token) => (
           <Chip key={token.text} token={token} />
@@ -121,14 +178,14 @@ export const Searchbar = () => {
             type="text"
             value={currentInput}
             onChange={(event) => setCurrentInput(event.target.value)}
-            onKeyDown={onKeyDown}
+            onKeyUp={onKeyUp}
             placeholder=""
             autoComplete="off"
           />
         )}
-        {inputVisible && (
+        {selectingOption && (
           <SearchBarOptions
-            fields={fields}
+            options={optionsToShow[selectingOption]}
             selectedFieldIndex={selectedFieldIndex}
           />
         )}

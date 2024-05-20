@@ -1,14 +1,14 @@
 import { FieldType, Token } from "./types";
 
 const operatorMap = {
-  "-": "negate",
-  "<": "lessThan",
-  ">": "moreThan",
-  "": "equals",
+  ":-": "negate",
+  ":<": "lessThan",
+  ":>": "moreThan",
+  ":": "equals",
 };
 
 export const parseTextContent = (textContent: string): Partial<Token> => {
-  const match = /(?<field>\w+)?:(?<operator>[-<>]?)?(?<value>\w+)?/gi.exec(
+  const match = /(?<field>\w+)?(?<operator>:[-<>]?)?(?<value>\w+)?/gi.exec(
     textContent,
   );
 
@@ -16,19 +16,21 @@ export const parseTextContent = (textContent: string): Partial<Token> => {
     text: textContent,
     field: match?.groups?.field,
     // TODO: check type with type predicate https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates
-    operator: operatorMap[match?.groups?.operator ?? ""] ?? "unknown",
+    operator: match?.groups?.operator
+      ? operatorMap[match?.groups?.operator]
+      : undefined,
     value: match?.groups?.value,
   };
 };
 
 export const tokenize = (textContent: string, fieldType: FieldType): Token => {
-  const parsed = parseTextContent(textContent)
+  const parsed = parseTextContent(textContent);
 
   return {
     text: textContent,
     field: parsed.field ?? "--missing field--",
     type: fieldType,
-    operator: parsed.operator,
+    operator: parsed.operator ?? "unknown",
     value: parsed.value ?? "--missing value--",
   };
 };

@@ -5,6 +5,12 @@ export type Field = {
   type: FieldType;
 };
 
+export type SearchOptions = {
+  name: string;
+  type?: FieldType;
+  description?: string
+}
+
 export type Token = {
   text: string;
   field: string;

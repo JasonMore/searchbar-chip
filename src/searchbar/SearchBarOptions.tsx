@@ -1,15 +1,17 @@
 import "./searchbarOptions.css";
-import type { Field } from "./types.ts";
+import type { SearchOptions } from "./types.ts";
+
+
 
 type Props = {
-  fields: Field[];
+  options: SearchOptions[];
   selectedFieldIndex: number | null;
 };
 
-export const SearchBarOptions = ({ fields, selectedFieldIndex }: Props) => {
+export const SearchBarOptions = ({ options, selectedFieldIndex }: Props) => {
   return (
     <div className="searchbarOptions-container">
-      {fields.map((field, index) => (
+      {options.map((field, index) => (
         <span
           key={index + field.name}
           className={`search-row ${selectedFieldIndex === index ? "search-selected" : ""}`}

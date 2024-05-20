@@ -2,12 +2,15 @@
   display: flex;
   flex-direction: column;
   background-color: white;
-  border: solid #1a1a1a;
+  border: solid #eeeeee;
+  border-radius: 4px;
   height: 15rem;
   position: absolute;
   top: 2.5rem;
-  left: 0;
   width: 100%;
+
+  /* not sure why px was off by one*/
+  left: -1px;
 }
 
 .search-row {
