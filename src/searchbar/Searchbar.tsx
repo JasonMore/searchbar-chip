@@ -169,14 +169,9 @@ export const Searchbar = () => {
     // ignore clicks from other elements on top
     if (event?.target !== searchBoxRef.current) return;
 
-    if (selectingOption) {
-      closeOptions();
-      return;
-    }
-
     resetOptions();
 
-    // I can't remember why this needs a setTimeout to work. Rendering order?
+    // I can't remember why this needs a setTimeout to work. Rendering after useState changes?
     setTimeout(() => {
       inputRef?.current?.focus();
     });
