@@ -194,7 +194,7 @@ export const Searchbar = () => {
 
         {setSelectingOption !== null && options && (
           <>
-            <div className="selecting-mask" onClick={closeOptions}></div>
+            <div className="search-click-mask" onClick={closeOptions} />
             <input
               ref={inputRef}
               className="search-input"
