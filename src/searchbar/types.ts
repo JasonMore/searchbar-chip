@@ -8,13 +8,13 @@ export type Field = {
 export type SearchOptions = {
   name: string;
   type?: FieldType;
-  description?: string
-}
+  description?: string;
+};
 
 export type Token = {
   text: string;
   field: string;
-  type: FieldType
-  operator: ":" | ":-" | ":<" | ":>"
+  type: FieldType;
+  operator: ":" | ":-" | ":<" | ":>" | "unknown";
   value: string;
 };

@@ -1,11 +1,33 @@
-import { KeyboardEvent, useRef, useState } from "react";
+import { KeyboardEvent, MouseEventHandler, useRef, useState } from "react";
 import "./Searchbar.css";
 import { Field, SearchOptions, Token } from "./types.ts";
 import { Chip } from "./Chip.tsx";
 import { parseTextContent, tokenize } from "./tokenize.ts";
 import { SearchBarOptions } from "./SearchBarOptions.tsx";
 
-const mockSetTokens = [];
+const mockSetTokens = [
+  {
+    text: "Stage:Contacted",
+    field: "Stage",
+    type: "string",
+    operator: ":",
+    value: "Contacted",
+  },
+  {
+    text: "Name:-Jason",
+    field: "Name",
+    type: "string",
+    operator: ":",
+    value: "Jason*",
+  },
+  {
+    text: "foo",
+    field: "",
+    type: "unknown",
+    operator: "unknown",
+    value: "",
+  },
+];
 
 const mockFields = {
   Stage: { type: "string" },
@@ -36,8 +58,8 @@ const mockValueOptions = [
 
 export const Searchbar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchBoxRef = useRef<HTMLDivElement>(null);
   const [currentInput, setCurrentInput] = useState("");
-  const [inputVisible, setInputVisible] = useState(false);
   const [selectedFieldIndex, setSelectedFieldIndex] = useState<null | number>(
     null,
   );
@@ -46,30 +68,7 @@ export const Searchbar = () => {
     null | "field" | "operator" | "value"
   >(null);
 
-  const [tokens, setTokens] = useState<Token[]>([
-    // mock tokens
-    {
-      text: "Stage:Contacted",
-      field: "Stage",
-      type: "string",
-      operator: "equals",
-      value: "Contacted",
-    },
-    {
-      text: "Name:Jason*",
-      field: "Name",
-      type: "string",
-      operator: "wildcard",
-      value: "Jason*",
-    },
-    {
-      text: "foo",
-      field: "",
-      type: "unknown",
-      operator: "unknown",
-      value: "",
-    },
-  ]);
+  const [tokens, setTokens] = useState<Token[]>(mockSetTokens);
 
   // TODO: Populated by parsing table data
   const [fields, setFields] = useState<SearchOptions[]>(mockFieldOptions);
@@ -85,7 +84,7 @@ export const Searchbar = () => {
   ];
 
   const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
-    const textContent = event.currentTarget.value;
+    let textContent = event.currentTarget.value;
     const partialToken = parseTextContent(textContent);
 
     if (event.key === "Enter") {
@@ -95,12 +94,14 @@ export const Searchbar = () => {
       if (selectedFieldIndex !== null) {
         if (selectingOption === "field") {
           setSelectedFieldIndex(null);
-          setCurrentInput(`${fields[selectedFieldIndex].name}:`);
+          setSelectingOption('operator')
+          setCurrentInput(`${fields[selectedFieldIndex].name}`);
           return;
         }
 
         if (selectingOption === "operator") {
           setSelectedFieldIndex(null);
+          setSelectingOption('value')
           setCurrentInput(
             `${partialToken.field}${operators[selectedFieldIndex].name}`,
           );
@@ -108,17 +109,14 @@ export const Searchbar = () => {
         }
 
         if (selectingOption === "value") {
-          setSelectedFieldIndex(null);
-          setCurrentInput(
-            `${partialToken.field}${partialToken.operator}${values[selectedFieldIndex].name}`,
-          );
-          return;
+          // no return, as if selecting final value, assume they also want to immediately tokenize
+          textContent = `${partialToken.field}${partialToken.operator}${values[selectedFieldIndex].name}`;
         }
       }
 
       // dropdown not active, user intends to set value
       tokenizeInput(textContent);
-      setInputVisible(false);
+      setSelectingOption(null);
     }
 
     const endOfList = options?.length - 1;
@@ -155,9 +153,15 @@ export const Searchbar = () => {
     }
   };
 
-  const showInput = () => {
-    if (inputVisible) return;
-    setInputVisible(true);
+  const containerClick: MouseEventHandler<HTMLDivElement> = (event) => {
+    // ignore clicks from other elements on top
+    if (event?.target !== searchBoxRef.current) return;
+
+    if (selectingOption) {
+      setSelectingOption(null);
+      return;
+    }
+
     setSelectingOption("field");
     setCurrentInput("");
 
@@ -167,34 +171,38 @@ export const Searchbar = () => {
     });
   };
 
+  const removeToken = (token: Token) => {
+    setTokens(tokens.toSpliced(tokens.indexOf(token), 1));
+  };
+
   return (
-    <div className="searchbar-container" onClick={showInput}>
-      <div className="search-box">
+    <div className="searchbar-container" onClick={containerClick}>
+      <div ref={searchBoxRef} className="search-box">
         <span className="search-icon">🔍</span>
 
         {tokens.map((token) => (
-          <Chip key={token.text} token={token} />
+          <Chip key={token.text} token={token} removeToken={removeToken} />
         ))}
 
         <div className="search-content"></div>
 
-        {inputVisible && (
-          <input
-            ref={inputRef}
-            className="search-input"
-            type="text"
-            value={currentInput}
-            onChange={(event) => setCurrentInput(event.target.value)}
-            onKeyUp={onKeyUp}
-            placeholder=""
-            autoComplete="off"
-          />
-        )}
-        {selectingOption && (
-          <SearchBarOptions
-            options={options}
-            selectedFieldIndex={selectedFieldIndex}
-          />
+        {setSelectingOption !== null && options && (
+          <>
+            <input
+              ref={inputRef}
+              className="search-input"
+              type="text"
+              value={currentInput}
+              onChange={(event) => setCurrentInput(event.target.value)}
+              onKeyUp={onKeyUp}
+              placeholder=""
+              autoComplete="off"
+            />
+            <SearchBarOptions
+              options={options}
+              selectedFieldIndex={selectedFieldIndex}
+            />
+          </>
         )}
       </div>
       output would be sent to the table filtering
