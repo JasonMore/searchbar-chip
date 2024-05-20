@@ -14,7 +14,9 @@
 }
 
 .search-row {
+  display: flex;
   padding: 0.75rem;
+  justify-content: space-between;
 }
 
 .search-row:hover {

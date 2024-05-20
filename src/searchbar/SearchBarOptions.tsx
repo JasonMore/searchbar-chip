@@ -13,13 +13,14 @@ export const SearchBarOptions = ({ options, selectedFieldIndex, onOptionClicked 
   return (
     <div className="searchbarOptions-container">
       {options.map((field, index) => (
-        <span
+        <div
           key={index + field.name}
           className={`search-row ${selectedFieldIndex === index ? "search-selected" : ""}`}
           onClick={() => onOptionClicked(index)}
         >
-          {field.name}
-        </span>
+          <span>{field.name}</span>
+          <span>{field.description ?? field.type}</span>
+        </div>
       ))}
     </div>
   );

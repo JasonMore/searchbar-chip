@@ -29,7 +29,7 @@ export const mockFields = {
   "Date of Last Interaction": { type: "date" },
 };
 export const mockFieldOptions = [
-  { name: "Stage", type: "string" },
+  { name: "Stage", type: "string"},
   { name: "PatientsReferred", type: "number" },
   { name: "Date of Last Interaction", type: "date" },
 ];
