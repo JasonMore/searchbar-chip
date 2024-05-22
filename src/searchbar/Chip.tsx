@@ -1,13 +1,6 @@
 import "./Chip.css";
 import type { Token } from "./types.ts";
-import {
-  ChangeEvent,
-  forwardRef,
-  KeyboardEvent,
-  RefObject,
-  useState,
-} from "react";
-import { SearchBarOptions } from "./SearchBarOptions.tsx";
+import { ChangeEvent, forwardRef, KeyboardEvent, RefObject } from "react";
 
 type Props = {
   token: Token;
@@ -15,6 +8,7 @@ type Props = {
   removeToken: (token: Token) => void;
   prevOption: () => void;
   nextOption: () => void;
+  onFocus: () => void;
   prevChipRef: RefObject<HTMLInputElement>;
   nextChipRef: RefObject<HTMLInputElement>;
 };
@@ -27,6 +21,7 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
       updateToken,
       prevOption,
       nextOption,
+      onFocus,
       prevChipRef,
       nextChipRef,
     },
@@ -82,6 +77,7 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
           value={token.text}
           onChange={onChange}
           onKeyDown={onKeyDown}
+          onFocus={onFocus}
           placeholder=""
           autoComplete="off"
         />

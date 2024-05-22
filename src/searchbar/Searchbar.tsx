@@ -35,7 +35,7 @@ export const Searchbar = () => {
 
   const [selectingOption, setSelectingOption] = useState<
     null | "field" | "operator" | "value"
-  >("field");
+  >(null);
 
   const [tokens, setTokens] = useState<Token[]>(mockSetTokens);
 
@@ -57,6 +57,12 @@ export const Searchbar = () => {
   const options = selectingOption
     ? { field: fields, operator: operators, value: values }[selectingOption]
     : [];
+
+  const openOptions = () => {
+    if (selectingOption === null) {
+      resetOptions();
+    }
+  };
 
   const closeOptions = () => {
     setSelectedFieldIndex(null);
@@ -166,27 +172,27 @@ export const Searchbar = () => {
 
   const endOfList = options?.length - 1;
 
-  const prevOption = () =>{
+  const prevOption = () => {
     if (selectedFieldIndex === null || selectedFieldIndex === 0) {
       return setSelectedFieldIndex(endOfList);
     }
 
     setSelectedFieldIndex(selectedFieldIndex - 1);
-  }
+  };
 
-  const nextOption = () =>{
+  const nextOption = () => {
     if (selectedFieldIndex === null || selectedFieldIndex === endOfList) {
       return setSelectedFieldIndex(0);
     }
 
     setSelectedFieldIndex(selectedFieldIndex + 1);
-  }
+  };
 
   const updateToken = (token: Token, index: number) => {
     const newTokens = [
       ...tokens.slice(0, index),
       token,
-      ...tokens.slice(index+1),
+      ...tokens.slice(index + 1),
     ];
     setTokens(newTokens);
   };
@@ -200,25 +206,9 @@ export const Searchbar = () => {
       <div ref={searchBoxRef} className="search-box">
         <span className="search-icon">🔍</span>
 
-        {tokens.map((token, index) => (
-          <Chip
-            key={index}
-            token={token}
-            updateToken={(token) => updateToken(token, index)}
-            removeToken={removeToken}
-            prevOption={prevOption}
-            nextOption={nextOption}
-            ref={chipRefs[index]}
-            prevChipRef={chipRefs[index - 1]}
-            nextChipRef={chipRefs[index + 1]}
-          />
-        ))}
-
-        <div className="search-content"></div>
-
         {selectingOption !== null && (
           <>
-            {/*<div className="search-click-mask" onClick={closeOptions} />*/}
+            <div className="search-click-mask" onClick={closeOptions} />
             {/*<input*/}
             {/*  ref={inputRef}*/}
             {/*  className="search-input"*/}
@@ -236,6 +226,21 @@ export const Searchbar = () => {
             />
           </>
         )}
+
+        {tokens.map((token, index) => (
+          <Chip
+            key={index}
+            token={token}
+            updateToken={(token) => updateToken(token, index)}
+            removeToken={removeToken}
+            prevOption={prevOption}
+            nextOption={nextOption}
+            onFocus={openOptions}
+            ref={chipRefs[index]}
+            prevChipRef={chipRefs[index - 1]}
+            nextChipRef={chipRefs[index + 1]}
+          />
+        ))}
       </div>
       <p>
         <h2>output would be sent to the table filtering</h2>
