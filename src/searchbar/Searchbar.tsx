@@ -1,4 +1,11 @@
-import { KeyboardEvent, MouseEventHandler, useRef, useState } from "react";
+import {
+  createRef,
+  KeyboardEvent,
+  MouseEventHandler,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import "./Searchbar.css";
 import { SearchOptions, Token } from "./types.ts";
 import { Chip } from "./Chip.tsx";
@@ -35,6 +42,12 @@ export const Searchbar = () => {
   // TODO: Populated by parsing table data
   const [fields, setFields] = useState<SearchOptions[]>(mockFieldOptions);
   const [values, setValues] = useState<SearchOptions[]>(mockValueOptions);
+
+  // chips
+  const chipRefs = useMemo(
+    () => tokens.map(() => createRef<HTMLInputElement>()),
+    [tokens],
+  );
 
   const tokenizeInput = (textContent: string) => {
     setTokens(tokens.concat(tokenize(textContent, "string")));
@@ -160,8 +173,13 @@ export const Searchbar = () => {
       <div ref={searchBoxRef} className="search-box">
         <span className="search-icon">🔍</span>
 
-        {tokens.map((token) => (
-          <Chip key={token.text} token={token} removeToken={removeToken} />
+        {tokens.map((token, index) => (
+          <Chip
+            key={token.text}
+            ref={chipRefs[index]}
+            token={token}
+            removeToken={removeToken}
+          />
         ))}
 
         <div className="search-content"></div>
