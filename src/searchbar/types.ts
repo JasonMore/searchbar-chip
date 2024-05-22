@@ -12,9 +12,9 @@ export type SearchOptions = {
 };
 
 export type Token = {
-  text: string;
-  field: string;
-  type: FieldType;
-  operator: ":" | ":-" | ":<" | ":>" | "unknown";
-  value: string;
+  text?: string;
+  field?: string;
+  type?: FieldType;
+  operator?: ":" | ":-" | ":<" | ":>" | "unknown";
+  value?: string;
 };

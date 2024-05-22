@@ -4,10 +4,11 @@ import { ChangeEvent, forwardRef, KeyboardEvent, RefObject } from "react";
 
 type Props = {
   token: Token;
-  updateToken: (newToken: Token) => void;
+  updateToken: (text: string) => void;
   removeToken: () => void;
   prevOption: () => void;
   nextOption: () => void;
+  selectOption: () => void;
   onFocus: () => void;
   newToken: () => void;
   prevChipRef: RefObject<HTMLInputElement>;
@@ -22,6 +23,7 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
       updateToken,
       prevOption,
       nextOption,
+      selectOption,
       newToken,
       onFocus,
       prevChipRef,
@@ -29,8 +31,6 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
     },
     ref,
   ) => {
-    // const [currentInput, setCurrentInput] = useState(token.text)
-
     // const valid = token.operator !== "unknown";
 
     const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -74,10 +74,15 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
         event.preventDefault();
         prevOption();
       }
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+        selectOption();
+      }
     };
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-      updateToken({ ...token, text: event.currentTarget.value });
+      updateToken(event.currentTarget.value);
     };
 
     return (
