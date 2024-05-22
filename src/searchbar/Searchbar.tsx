@@ -164,6 +164,15 @@ export const Searchbar = () => {
     });
   };
 
+  const updateToken = (token: Token, index: number) => {
+    const newTokens = [
+      ...tokens.slice(0, index),
+      token,
+      ...tokens.slice(index+1),
+    ];
+    setTokens(newTokens);
+  };
+
   const removeToken = (token: Token) => {
     setTokens(tokens.toSpliced(tokens.indexOf(token), 1));
   };
@@ -175,12 +184,13 @@ export const Searchbar = () => {
 
         {tokens.map((token, index) => (
           <Chip
-            key={token.text}
+            key={index}
             token={token}
+            updateToken={(token) => updateToken(token, index)}
             removeToken={removeToken}
             ref={chipRefs[index]}
-            prevChipRef={chipRefs[index-1]}
-            nextChipRef={chipRefs[index+1]}
+            prevChipRef={chipRefs[index - 1]}
+            nextChipRef={chipRefs[index + 1]}
           />
         ))}
 
@@ -188,22 +198,22 @@ export const Searchbar = () => {
 
         {selectingOption !== null && (
           <>
-            <div className="search-click-mask" onClick={closeOptions} />
-            <input
-              ref={inputRef}
-              className="search-input"
-              type="text"
-              value={currentInput}
-              onChange={(event) => setCurrentInput(event.target.value)}
-              onKeyUp={onKeyUp}
-              placeholder=""
-              autoComplete="off"
-            />
-            <SearchBarOptions
-              options={options}
-              selectedFieldIndex={selectedFieldIndex}
-              onOptionClicked={onOptionClicked}
-            />
+            {/*<div className="search-click-mask" onClick={closeOptions} />*/}
+            {/*<input*/}
+            {/*  ref={inputRef}*/}
+            {/*  className="search-input"*/}
+            {/*  type="text"*/}
+            {/*  value={currentInput}*/}
+            {/*  onChange={(event) => setCurrentInput(event.target.value)}*/}
+            {/*  onKeyUp={onKeyUp}*/}
+            {/*  placeholder=""*/}
+            {/*  autoComplete="off"*/}
+            {/*/>*/}
+            {/*<SearchBarOptions*/}
+            {/*  options={options}*/}
+            {/*  selectedFieldIndex={selectedFieldIndex}*/}
+            {/*  onOptionClicked={onOptionClicked}*/}
+            {/*/>*/}
           </>
         )}
       </div>

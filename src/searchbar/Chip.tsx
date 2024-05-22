@@ -1,33 +1,43 @@
 import "./Chip.css";
 import type { Token } from "./types.ts";
-import { forwardRef, KeyboardEvent, RefObject } from "react";
+import {
+  ChangeEvent,
+  forwardRef,
+  KeyboardEvent,
+  RefObject,
+  useState,
+} from "react";
+import { SearchBarOptions } from "./SearchBarOptions.tsx";
 
 type Props = {
   token: Token;
+  updateToken: (token: Token) => void;
   removeToken: (token: Token) => void;
   prevChipRef: RefObject<HTMLInputElement>;
   nextChipRef: RefObject<HTMLInputElement>;
 };
 
 export const Chip = forwardRef<HTMLInputElement, Props>(
-  ({ token, removeToken, prevChipRef, nextChipRef }, ref) => {
-    const valid = token.operator !== "unknown";
+  ({ token, removeToken, updateToken, prevChipRef, nextChipRef }, ref) => {
+    // const [currentInput, setCurrentInput] = useState(token.text)
 
-    const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-      const isAtStart = e.currentTarget.selectionStart === 0;
+    // const valid = token.operator !== "unknown";
+
+    const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+      const isAtStart = event.currentTarget.selectionStart === 0;
       const isAtEnd =
-        e.currentTarget.selectionStart === e.currentTarget.value.length;
+        event.currentTarget.selectionStart === event.currentTarget.value.length;
 
-      if (e.key === "ArrowLeft" && isAtStart) {
-        e.preventDefault();
+      if (event.key === "ArrowLeft" && isAtStart) {
+        event.preventDefault();
         if (prevChipRef?.current) {
           prevChipRef.current.focus();
           prevChipRef.current.selectionStart = prevChipRef.current.value.length;
         }
       }
 
-      if (e.key === "ArrowRight" && isAtEnd) {
-        e.preventDefault();
+      if (event.key === "ArrowRight" && isAtEnd) {
+        event.preventDefault();
         if (nextChipRef?.current) {
           nextChipRef.current.focus();
           nextChipRef.current.selectionStart = 0;
@@ -35,18 +45,34 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
       }
     };
 
+    const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+      // setCurrentInput(event.currentTarget.value)
+      updateToken({ ...token, text: event.currentTarget.value });
+    };
+
     return (
-      <div className={`chip ${valid ? "chip-valid" : ""}`}>
+      <div>
+        {/*<div className="search-click-mask" onClick={closeOptions} />*/}
         <input
           ref={ref}
-          onKeyDown={onKeyDown}
-          className="chip-text"
+          className="search-input"
+          type="text"
           value={token.text}
+          onChange={onChange}
+          onKeyDown={onKeyDown}
+          placeholder=""
+          autoComplete="off"
         />
-        <span className="chip-remove" onClick={() => removeToken(token)}>
-          X
-        </span>
+        {/*<SearchBarOptions*/}
+        {/*  options={options}*/}
+        {/*  selectedFieldIndex={selectedFieldIndex}*/}
+        {/*  onOptionClicked={onOptionClicked}*/}
+        {/*/>*/}
+
+        {/*<span className="chip-remove" onClick={() => removeToken(token)}>*/}
+        {/*  X*/}
+        {/*</span>*/}
       </div>
     );
-  }
+  },
 );
