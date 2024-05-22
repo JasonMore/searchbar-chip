@@ -35,7 +35,7 @@ export const Searchbar = () => {
 
   const [selectingOption, setSelectingOption] = useState<
     null | "field" | "operator" | "value"
-  >(null);
+  >("field");
 
   const [tokens, setTokens] = useState<Token[]>(mockSetTokens);
 
@@ -164,6 +164,24 @@ export const Searchbar = () => {
     });
   };
 
+  const endOfList = options?.length - 1;
+
+  const prevOption = () =>{
+    if (selectedFieldIndex === null || selectedFieldIndex === 0) {
+      return setSelectedFieldIndex(endOfList);
+    }
+
+    setSelectedFieldIndex(selectedFieldIndex - 1);
+  }
+
+  const nextOption = () =>{
+    if (selectedFieldIndex === null || selectedFieldIndex === endOfList) {
+      return setSelectedFieldIndex(0);
+    }
+
+    setSelectedFieldIndex(selectedFieldIndex + 1);
+  }
+
   const updateToken = (token: Token, index: number) => {
     const newTokens = [
       ...tokens.slice(0, index),
@@ -188,6 +206,8 @@ export const Searchbar = () => {
             token={token}
             updateToken={(token) => updateToken(token, index)}
             removeToken={removeToken}
+            prevOption={prevOption}
+            nextOption={nextOption}
             ref={chipRefs[index]}
             prevChipRef={chipRefs[index - 1]}
             nextChipRef={chipRefs[index + 1]}
@@ -209,11 +229,11 @@ export const Searchbar = () => {
             {/*  placeholder=""*/}
             {/*  autoComplete="off"*/}
             {/*/>*/}
-            {/*<SearchBarOptions*/}
-            {/*  options={options}*/}
-            {/*  selectedFieldIndex={selectedFieldIndex}*/}
-            {/*  onOptionClicked={onOptionClicked}*/}
-            {/*/>*/}
+            <SearchBarOptions
+              options={options}
+              selectedFieldIndex={selectedFieldIndex}
+              onOptionClicked={onOptionClicked}
+            />
           </>
         )}
       </div>

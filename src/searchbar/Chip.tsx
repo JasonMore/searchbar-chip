@@ -13,12 +13,25 @@ type Props = {
   token: Token;
   updateToken: (token: Token) => void;
   removeToken: (token: Token) => void;
+  prevOption: () => void;
+  nextOption: () => void;
   prevChipRef: RefObject<HTMLInputElement>;
   nextChipRef: RefObject<HTMLInputElement>;
 };
 
 export const Chip = forwardRef<HTMLInputElement, Props>(
-  ({ token, removeToken, updateToken, prevChipRef, nextChipRef }, ref) => {
+  (
+    {
+      token,
+      removeToken,
+      updateToken,
+      prevOption,
+      nextOption,
+      prevChipRef,
+      nextChipRef,
+    },
+    ref,
+  ) => {
     // const [currentInput, setCurrentInput] = useState(token.text)
 
     // const valid = token.operator !== "unknown";
@@ -43,10 +56,19 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
           nextChipRef.current.selectionStart = 0;
         }
       }
+
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        nextOption();
+      }
+
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        prevOption();
+      }
     };
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-      // setCurrentInput(event.currentTarget.value)
       updateToken({ ...token, text: event.currentTarget.value });
     };
 
@@ -63,11 +85,6 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
           placeholder=""
           autoComplete="off"
         />
-        {/*<SearchBarOptions*/}
-        {/*  options={options}*/}
-        {/*  selectedFieldIndex={selectedFieldIndex}*/}
-        {/*  onOptionClicked={onOptionClicked}*/}
-        {/*/>*/}
 
         {/*<span className="chip-remove" onClick={() => removeToken(token)}>*/}
         {/*  X*/}
