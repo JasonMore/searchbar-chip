@@ -176,9 +176,11 @@ export const Searchbar = () => {
         {tokens.map((token, index) => (
           <Chip
             key={token.text}
-            ref={chipRefs[index]}
             token={token}
             removeToken={removeToken}
+            ref={chipRefs[index]}
+            prevChipRef={chipRefs[index-1]}
+            nextChipRef={chipRefs[index+1]}
           />
         ))}
 

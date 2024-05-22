@@ -1,25 +1,17 @@
 import "./Chip.css";
 import type { Token } from "./types.ts";
-import { forwardRef, KeyboardEvent, useRef } from "react";
+import { forwardRef, KeyboardEvent } from "react";
 
 type Props = {
   token: Token;
   removeToken: (token: Token) => void;
+  prevChipRef: React.RefObject<HTMLInputElement>;
+  nextChipRef: React.RefObject<HTMLInputElement>;
 };
 
 export const Chip = forwardRef<HTMLInputElement, Props>(
-  ({ token, removeToken }, ref) => {
+  ({ token, removeToken, prevChipRef, nextChipRef }, ref) => {
     const valid = token.operator != "unknown";
-
-    const focusStart = () => {
-      inputRef?.current?.focus();
-      inputRef?.current?.selectionStart = 0;
-    };
-
-    const focusEnd = () => {
-      inputRef?.current?.focus();
-      inputRef?.current?.selectionStart = inputRef?.current?.value.length;
-    };
 
     const onKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
       const isAtStart = e.currentTarget.selectionStart === 0;
@@ -28,18 +20,18 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
 
       if (e.key === "ArrowLeft" && isAtStart) {
         e.preventDefault();
-        onMoveLeft();
-        // if (prevInputRef && prevInputRef.current) {
-        //   prevInputRef.current.focus();
-        //   prevInputRef.current.selectionStart = prevInputRef.current.value.length;
-        // }
+        if (prevChipRef?.current) {
+          prevChipRef?.current.focus();
+          prevChipRef?.current?.selectionStart =
+            prevChipRef?.current.value.length;
+        }
       }
 
       if (e.key === "ArrowRight" && isAtEnd) {
         e.preventDefault();
-        if (nextInputRef && nextInputRef.current) {
-          nextInputRef.current.focus();
-          nextInputRef.current.selectionStart = 0;
+        if (nextChipRef?.current) {
+          nextChipRef?.current.focus();
+          nextChipRef?.current.selectionStart = 0;
         }
       }
     };
