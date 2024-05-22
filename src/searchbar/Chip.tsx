@@ -4,11 +4,12 @@ import { ChangeEvent, forwardRef, KeyboardEvent, RefObject } from "react";
 
 type Props = {
   token: Token;
-  updateToken: (token: Token) => void;
-  removeToken: (token: Token) => void;
+  updateToken: (newToken: Token) => void;
+  removeToken: () => void;
   prevOption: () => void;
   nextOption: () => void;
   onFocus: () => void;
+  newToken: () => void;
   prevChipRef: RefObject<HTMLInputElement>;
   nextChipRef: RefObject<HTMLInputElement>;
 };
@@ -21,6 +22,7 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
       updateToken,
       prevOption,
       nextOption,
+      newToken,
       onFocus,
       prevChipRef,
       nextChipRef,
@@ -36,12 +38,10 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
       const isAtEnd =
         event.currentTarget.selectionStart === event.currentTarget.value.length;
 
-      if (event.key === "ArrowLeft" && isAtStart) {
+      if (event.key === "ArrowLeft" && isAtStart && prevChipRef?.current) {
         event.preventDefault();
-        if (prevChipRef?.current) {
-          prevChipRef.current.focus();
-          prevChipRef.current.selectionStart = prevChipRef.current.value.length;
-        }
+        prevChipRef.current.focus();
+        prevChipRef.current.selectionStart = prevChipRef.current.value.length;
       }
 
       if (event.key === "ArrowRight" && isAtEnd) {
@@ -49,7 +49,20 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
         if (nextChipRef?.current) {
           nextChipRef.current.focus();
           nextChipRef.current.selectionStart = 0;
+        } else {
+          newToken();
         }
+      }
+
+      if (
+        event.key === "Backspace" &&
+        event.currentTarget.value.length === 0 &&
+        prevChipRef?.current
+      ) {
+        event.preventDefault();
+        prevChipRef.current.focus();
+        prevChipRef.current.selectionStart = prevChipRef.current.value.length;
+        removeToken();
       }
 
       if (event.key === "ArrowDown") {

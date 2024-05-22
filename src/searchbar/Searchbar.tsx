@@ -37,7 +37,7 @@ export const Searchbar = () => {
     null | "field" | "operator" | "value"
   >(null);
 
-  const [tokens, setTokens] = useState<Token[]>(mockSetTokens);
+  const [tokens, setTokens] = useState<Partial<Token>[]>(mockSetTokens);
 
   // TODO: Populated by parsing table data
   const [fields, setFields] = useState<SearchOptions[]>(mockFieldOptions);
@@ -197,8 +197,12 @@ export const Searchbar = () => {
     setTokens(newTokens);
   };
 
-  const removeToken = (token: Token) => {
-    setTokens(tokens.toSpliced(tokens.indexOf(token), 1));
+  const removeToken = (index: number) => {
+    setTokens(tokens.toSpliced(index, 1));
+  };
+
+  const newToken = () => {
+    setTokens([...tokens, parseTextContent()]);
   };
 
   return (
@@ -230,13 +234,14 @@ export const Searchbar = () => {
         {tokens.map((token, index) => (
           <Chip
             key={index}
+            ref={chipRefs[index]}
             token={token}
-            updateToken={(token) => updateToken(token, index)}
-            removeToken={removeToken}
+            updateToken={(newToken) => updateToken(newToken, index)}
+            removeToken={() => removeToken(index)}
             prevOption={prevOption}
             nextOption={nextOption}
             onFocus={openOptions}
-            ref={chipRefs[index]}
+            newToken={newToken}
             prevChipRef={chipRefs[index - 1]}
             nextChipRef={chipRefs[index + 1]}
           />

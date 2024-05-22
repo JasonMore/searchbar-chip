@@ -1,6 +1,6 @@
 import { FieldType, Token } from "./types";
 
-export const parseTextContent = (textContent: string): Partial<Token> => {
+export const parseTextContent = (textContent: string = ""): Partial<Token> => {
   const match = /(?<field>\w+)?(?<operator>:[-<>]?)?(?<value>\w+)?/gi.exec(
     textContent,
   );
