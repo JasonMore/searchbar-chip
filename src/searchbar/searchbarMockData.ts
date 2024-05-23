@@ -20,7 +20,10 @@ export const mockFields = {
   stage: {
     name: "Stage",
     type: "string",
-    operators: [":=", ":-"],
+    operators: [
+      { name: ":=", description: "Equals - exactly this value" },
+      { name: ":-", description: "Not - do not include" },
+    ],
     values: [
       { name: "Lead", type: "string" },
       { name: "Demo", type: "string" },
@@ -32,12 +35,29 @@ export const mockFields = {
   patientsreferred: {
     name: "PatientsReferred",
     type: "number",
-    operators: [":=", ":-", ":>", ":="],
+    operators: [
+      { name: ":=", description: "Equals - exactly this value" },
+      { name: ":-", description: "Not - do not include" },
+      { name: ":<", description: "Less Than - values below" },
+      { name: ":>", description: "Greater Than - values higher" },
+    ],
   },
   "date of last interaction": {
     name: "Date of Last Interaction",
     type: "date",
-    operators: [":=", ":-", ":>", ":="],
+    operators: [
+      { name: ":=", description: "Equals - exactly this Date" },
+      { name: ":-", description: "Not - do not include" },
+      { name: ":<", description: "Less Than - Dates before" },
+      { name: ":>", description: "Greater Than - Dates Fater" },
+    ],
   },
-  name: { name: "Name", type: "string", operators: [":=", ":-"] },
+  name: {
+    name: "Name",
+    type: "string",
+    operators: [
+      { name: ":=", description: "Equals - exactly this value" },
+      { name: ":-", description: "Not - do not include" },
+    ],
+  },
 };

@@ -13,13 +13,6 @@ import { parseTextContent } from "./tokenize.ts";
 import { SearchBarOptions } from "./SearchBarOptions.tsx";
 import { mockFields } from "./searchbarMockData.ts";
 
-const operators = [
-  { name: ":-", description: "Not - do not include" },
-  { name: ":<", description: "Less Than - values below or earlier than" },
-  { name: ":>", description: "Greater Than - values above or later than" },
-  { name: ":=", description: "Equals - exactly this value" },
-];
-
 export const Searchbar = () => {
   const searchBoxRef = useRef<HTMLDivElement>(null);
   const [selectedFieldIndex, setSelectedFieldIndex] = useState<null | number>(
@@ -37,6 +30,7 @@ export const Searchbar = () => {
   const [fields, setFields] = useState<SearchOptions[]>(
     Object.values(mockFields),
   );
+  const [operators, setOperators] = useState<SearchOptions[]>([]);
   const [values, setValues] = useState<SearchOptions[]>([]);
 
   const chipRefs = useMemo(
@@ -93,6 +87,7 @@ export const Searchbar = () => {
         setValues(mockFields[token.field.toLowerCase()]?.values ?? []);
       } else {
         setSelectingOption("operator");
+        setOperators(mockFields[token.field.toLowerCase()]?.operators);
       }
     } else {
       setSelectingOption("field");
