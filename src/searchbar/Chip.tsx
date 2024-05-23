@@ -9,6 +9,7 @@ type Props = {
   prevOption: () => void;
   nextOption: () => void;
   selectOption: () => void;
+  closeOption: () => void;
   onFocus: () => void;
   newToken: () => void;
   prevChipRef: RefObject<HTMLInputElement>;
@@ -24,6 +25,7 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
       prevOption,
       nextOption,
       selectOption,
+      closeOption,
       newToken,
       onFocus,
       prevChipRef,

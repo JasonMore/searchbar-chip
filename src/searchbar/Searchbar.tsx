@@ -13,13 +13,6 @@ import { parseTextContent } from "./tokenize.ts";
 import { SearchBarOptions } from "./SearchBarOptions.tsx";
 import { mockFields, mockSetTokens } from "./searchbarMockData.ts";
 
-const operators = [
-  { name: ":-", description: "Not - do not include" },
-  { name: ":<", description: "Less Than - values below or earlier than" },
-  { name: ":>", description: "Greater Than - values above or later than" },
-  { name: ":=", description: "Equals - exactly this value" },
-];
-
 export const Searchbar = () => {
   const searchBoxRef = useRef<HTMLDivElement>(null);
   const [selectedFieldIndex, setSelectedFieldIndex] = useState<null | number>(
@@ -37,7 +30,7 @@ export const Searchbar = () => {
   const [fields, setFields] = useState<SearchOptions[]>(
     Object.values(mockFields),
   );
-  const [values, setValues] = useState<SearchOptions[]>([]);
+  const [options, setOptions] = useState<SearchOptions[]>([]);
 
   const chipRefs = useMemo(
     () =>
@@ -54,11 +47,6 @@ export const Searchbar = () => {
       chipRefs[tokens.length - 1].current?.focus();
     }
   }, [chipRefs, tokens]);
-
-  // the current list of options to show in the dropdown
-  const options = selectingOption
-    ? { field: fields, operator: operators, value: values }[selectingOption]
-    : [];
 
   const openOptions = (index: number) => {
     setTokenFocusIndex(index);
@@ -80,20 +68,23 @@ export const Searchbar = () => {
       // user has a real field set
       if (token.operator) {
         setSelectingOption("value");
-        setValues(mockFields[token.field]?.values ?? []);
+        setOptions(mockFields[token.field]?.values ?? []);
       } else {
         setSelectingOption("operator");
+        setOptions(mockFields[token.field]?.operators);
       }
     } else {
       setSelectingOption("field");
-      setValues(Object.values(mockFields));
+      const fields = Object.values(mockFields).filter((field) =>
+        field.name
+          .toLocaleLowerCase()
+          .includes(token.field?.toLocaleLowerCase() ?? ""),
+      );
+      setOptions(fields);
     }
   };
 
-  const optionSelected = (
-    partialToken: Partial<Token>,
-    optionIndex: number,
-  ) => {
+  const optionSelected = (token: Partial<Token>, optionIndex: number) => {
     if (selectingOption === "field") {
       setSelectedFieldIndex(null);
       setSelectingOption("operator");
@@ -104,14 +95,14 @@ export const Searchbar = () => {
     if (selectingOption === "operator") {
       setSelectedFieldIndex(null);
       setSelectingOption("value");
-      updateToken(`${partialToken.field}${operators[optionIndex].name}`);
+      updateToken(`${token.field}${mockFields[token.field]?.operators.name}`);
       return;
     }
 
     if (selectingOption === "value") {
       // no return, as if selecting final value, assume they also want to immediately tokenize
       updateToken(
-        `${partialToken.field}${partialToken.operator}${values[optionIndex].name}`,
+        `${token.field}${token.operator}${options[optionIndex].name}`,
       );
       // newToken()
       // tokenizeInput(textContent);
@@ -223,6 +214,7 @@ export const Searchbar = () => {
             prevOption={prevOption}
             nextOption={nextOption}
             selectOption={() => selectOption()}
+            closeOption={closeOptions}
             onFocus={() => openOptions(index)}
             newToken={newToken}
             prevChipRef={chipRefs[index - 1]}
