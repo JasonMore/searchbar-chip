@@ -11,7 +11,7 @@ import { SearchOptions, Token } from "./types.ts";
 import { Chip } from "./Chip.tsx";
 import { parseTextContent } from "./tokenize.ts";
 import { SearchBarOptions } from "./SearchBarOptions.tsx";
-import { mockFields, mockSetTokens } from "./searchbarMockData.ts";
+import { mockFields } from "./searchbarMockData.ts";
 
 const operators = [
   { name: ":-", description: "Not - do not include" },
@@ -63,6 +63,7 @@ export const Searchbar = () => {
   const openOptions = (index: number) => {
     setTokenFocusIndex(index);
     nextOperator(tokens[index]);
+    //TODO: keep focus on input, but do not break navigating between inputs
   };
 
   const closeOptions = () => {
@@ -184,9 +185,9 @@ export const Searchbar = () => {
 
     if (selectedFieldIndex !== null) {
       optionSelected(parsedToken, selectedFieldIndex);
+    } else {
+      closeOptions();
     }
-
-    // closeOptions();
   };
 
   return (
@@ -195,7 +196,7 @@ export const Searchbar = () => {
         <span className="search-icon">🔍</span>
         {selectingOption !== null && (
           <>
-            {/*TODO: Make click mask work with multiple elements*/}
+            {/*TODO: Make click mask work with multiple input elements*/}
             {/*<div className="search-click-mask" onClick={closeOptions} />*/}
             <SearchBarOptions
               options={options}
