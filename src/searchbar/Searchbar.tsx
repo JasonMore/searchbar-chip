@@ -76,11 +76,11 @@ export const Searchbar = () => {
   };
 
   const nextOperator = (token: Token) => {
-    if (token.field && mockFields[token.field]) {
+    if (token.field && mockFields[token.field.toLowerCase()]) {
       // user has a real field set
       if (token.operator) {
         setSelectingOption("value");
-        setValues(mockFields[token.field]?.values ?? []);
+        setValues(mockFields[token.field.toLowerCase()]?.values ?? []);
       } else {
         setSelectingOption("operator");
       }

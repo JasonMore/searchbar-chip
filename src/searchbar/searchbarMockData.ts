@@ -17,7 +17,7 @@ export const mockSetTokens: Token[] = [
   },
 ];
 export const mockFields = {
-  Stage: {
+  stage: {
     name: "Stage",
     type: "string",
     operators: [":=", ":-"],
@@ -29,15 +29,15 @@ export const mockFields = {
       { name: "Closed-Lost", type: "string" },
     ],
   },
-  PatientsReferred: {
+  patientsreferred: {
     name: "PatientsReferred",
     type: "number",
     operators: [":=", ":-", ":>", ":="],
   },
-  "Date of Last Interaction": {
+  "date of last interaction": {
     name: "Date of Last Interaction",
     type: "date",
     operators: [":=", ":-", ":>", ":="],
   },
-  Name: { name: "Name", type: "string", operators: [":=", ":-"] },
+  name: { name: "Name", type: "string", operators: [":=", ":-"] },
 };
