@@ -118,6 +118,7 @@ export const Searchbar = () => {
   };
 
   const onOptionClicked = (optionIndex: number) => {
+    if (tokenFocusIndex === null) return;
     optionSelected(parseTextContent(tokens[tokenFocusIndex].text), optionIndex);
   };
 
@@ -148,8 +149,8 @@ export const Searchbar = () => {
   };
 
   const updateToken = (text: string) => {
+    if (tokenFocusIndex === null) return;
     const parsedToken = parseTextContent(text);
-
     nextOperator(parsedToken);
 
     const newTokens = [
@@ -161,6 +162,7 @@ export const Searchbar = () => {
   };
 
   const removeToken = () => {
+    if (tokenFocusIndex === null) return;
     setTokens(tokens.toSpliced(tokenFocusIndex, 1));
   };
 
@@ -176,10 +178,11 @@ export const Searchbar = () => {
   };
 
   const selectOption = () => {
+    if (tokenFocusIndex === null) return;
     const token = tokens[tokenFocusIndex];
     const parsedToken = parseTextContent(token.text);
 
-    if (selectedFieldIndex) {
+    if (selectedFieldIndex !== null) {
       optionSelected(parsedToken, selectedFieldIndex);
     }
 
@@ -209,10 +212,10 @@ export const Searchbar = () => {
             ref={chipRefs[index]}
             token={token}
             updateToken={(text) => updateToken(text)}
-            removeToken={() => removeToken()}
+            removeToken={removeToken}
             prevOption={prevOption}
             nextOption={nextOption}
-            selectOption={() => selectOption()}
+            selectOption={selectOption}
             onFocus={() => openOptions(index)}
             newToken={newToken}
             prevChipRef={chipRefs[index - 1]}
