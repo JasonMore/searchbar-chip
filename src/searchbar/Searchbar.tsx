@@ -1,28 +1,23 @@
 import {
   createRef,
   MouseEventHandler,
-  RefObject, useEffect,
+  useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
 } from "react";
 import "./Searchbar.css";
 import { SearchOptions, Token } from "./types.ts";
 import { Chip } from "./Chip.tsx";
 import { parseTextContent } from "./tokenize.ts";
 import { SearchBarOptions } from "./SearchBarOptions.tsx";
-import {
-  mockFieldOptions,
-  mockFields,
-  mockSetTokens,
-  mockValueOptions,
-} from "./searchbarMockData.ts";
+import { mockFields, mockSetTokens } from "./searchbarMockData.ts";
 
 const operators = [
   { name: ":-", description: "Not - do not include" },
   { name: ":<", description: "Less Than - values below or earlier than" },
   { name: ":>", description: "Greater Than - values above or later than" },
-  { name: ":", description: "Equals - exactly this value" },
+  { name: ":=", description: "Equals - exactly this value" },
 ];
 
 export const Searchbar = () => {
@@ -39,8 +34,10 @@ export const Searchbar = () => {
   const [tokens, setTokens] = useState<Partial<Token>[]>(mockSetTokens);
 
   // TODO: Populated by parsing table data
-  const [fields, setFields] = useState<SearchOptions[]>(mockFieldOptions);
-  const [values, setValues] = useState<SearchOptions[]>(mockValueOptions);
+  const [fields, setFields] = useState<SearchOptions[]>(
+    Object.values(mockFields),
+  );
+  const [values, setValues] = useState<SearchOptions[]>([]);
 
   const chipRefs = useMemo(
     () =>
@@ -50,14 +47,13 @@ export const Searchbar = () => {
     [tokens.length],
   );
 
-  useEffect(() =>{
+  useEffect(() => {
     // hack: I'm struggling to focus the input when its newly created.
     // so if new and last, focus it
-    if(!tokens[tokens.length-1].text){
-      chipRefs[tokens.length-1].current?.focus()
+    if (!tokens[tokens.length - 1].text) {
+      chipRefs[tokens.length - 1].current?.focus();
     }
-  },[chipRefs, tokens])
-
+  }, [chipRefs, tokens]);
 
   // the current list of options to show in the dropdown
   const options = selectingOption
@@ -66,9 +62,7 @@ export const Searchbar = () => {
 
   const openOptions = (index: number) => {
     setTokenFocusIndex(index);
-    if (selectingOption === null) {
-      resetOptions();
-    }
+    nextOperator(tokens[index]);
   };
 
   const closeOptions = () => {
@@ -86,11 +80,13 @@ export const Searchbar = () => {
       // user has a real field set
       if (token.operator) {
         setSelectingOption("value");
+        setValues(mockFields[token.field]?.values ?? []);
       } else {
         setSelectingOption("operator");
       }
     } else {
       setSelectingOption("field");
+      setValues(Object.values(mockFields));
     }
   };
 

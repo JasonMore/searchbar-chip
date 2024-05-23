@@ -31,8 +31,6 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
     },
     ref,
   ) => {
-    // const valid = token.operator !== "unknown";
-
     const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
       const isAtStart = event.currentTarget.selectionStart === 0;
       const isAtEnd =

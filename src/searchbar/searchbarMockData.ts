@@ -5,33 +5,39 @@ export const mockSetTokens: Token[] = [
     text: "Stage:Contacted",
     field: "Stage",
     type: "string",
-    operator: ":",
+    operator: ":=",
     value: "Contacted",
   },
   {
     text: "Name:-Jason",
     field: "Name",
     type: "string",
-    operator: ":",
+    operator: ":=",
     value: "Jason*",
   },
 ];
 export const mockFields = {
-  Stage: { type: "string" },
-  PatientsReferred: { type: "number" },
-  "Date of Last Interaction": { type: "date" },
-  Name: { type: "string" },
+  Stage: {
+    name: "Stage",
+    type: "string",
+    operators: [":=", ":-"],
+    values: [
+      { name: "Lead", type: "string" },
+      { name: "Demo", type: "string" },
+      { name: "Negotiating", type: "string" },
+      { name: "Closed-Won", type: "string" },
+      { name: "Closed-Lost", type: "string" },
+    ],
+  },
+  PatientsReferred: {
+    name: "PatientsReferred",
+    type: "number",
+    operators: [":=", ":-", ":>", ":="],
+  },
+  "Date of Last Interaction": {
+    name: "Date of Last Interaction",
+    type: "date",
+    operators: [":=", ":-", ":>", ":="],
+  },
+  Name: { name: "Name", type: "string", operators: [":=", ":-"] },
 };
-export const mockFieldOptions = [
-  { name: "Stage", type: "string" },
-  { name: "PatientsReferred", type: "number" },
-  { name: "Date of Last Interaction", type: "date" },
-  { name: "Name", type: "string" },
-];
-export const mockValueOptions = [
-  { name: "Lead", type: "string" },
-  { name: "Demo", type: "string" },
-  { name: "Negotiating", type: "string" },
-  { name: "Closed-Won", type: "string" },
-  { name: "Closed-Lost", type: "string" },
-];

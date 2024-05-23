@@ -22,6 +22,9 @@ export const SearchBarOptions = ({ options, selectedFieldIndex, onOptionClicked 
           <span>{field.description ?? field.type}</span>
         </div>
       ))}
+      {options.length === 0 && (
+        <span>TODO: Conditionally message based on type. Type any value</span>
+      )}
     </div>
   );
 };
