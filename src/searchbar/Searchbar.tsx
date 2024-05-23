@@ -31,7 +31,7 @@ export const Searchbar = () => {
   >(null);
 
   const [tokenFocusIndex, setTokenFocusIndex] = useState<null | number>(null);
-  const [tokens, setTokens] = useState<Partial<Token>[]>(mockSetTokens);
+  const [tokens, setTokens] = useState<Partial<Token>[]>([]);
 
   // TODO: Populated by parsing table data
   const [fields, setFields] = useState<SearchOptions[]>(
@@ -41,16 +41,16 @@ export const Searchbar = () => {
 
   const chipRefs = useMemo(
     () =>
-      Array(tokens.length)
+      Array(tokens?.length ?? 0)
         .fill(0)
         .map(() => createRef<HTMLInputElement>()),
-    [tokens.length],
+    [tokens?.length],
   );
 
   useEffect(() => {
     // hack: I'm struggling to focus the input when its newly created.
     // so if new and last, focus it
-    if (!tokens[tokens.length - 1].text) {
+    if (tokens.length && !tokens[tokens.length - 1].text) {
       chipRefs[tokens.length - 1].current?.focus();
     }
   }, [chipRefs, tokens]);
