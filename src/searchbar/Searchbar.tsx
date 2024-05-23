@@ -113,8 +113,6 @@ export const Searchbar = () => {
       updateToken(
         `${partialToken.field}${partialToken.operator}${values[optionIndex].name}`,
       );
-      // newToken()
-      // tokenizeInput(textContent);
       closeOptions();
     }
   };
@@ -185,15 +183,7 @@ export const Searchbar = () => {
       optionSelected(parsedToken, selectedFieldIndex);
     }
 
-    // // replace field or value
-    // if (selectedFieldIndex !== null) {
-    //   optionSelected(partialToken, selectedFieldIndex);
-    //   return;
-    // }
-    //
-    // // dropdown not active, user intends to set value
-    // tokenizeInput(tokens[index].text);
-    // closeOptions();
+    closeOptions();
   };
 
   return (
