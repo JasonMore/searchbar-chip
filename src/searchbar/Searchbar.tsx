@@ -181,7 +181,9 @@ export const Searchbar = () => {
     const token = tokens[tokenFocusIndex];
     const parsedToken = parseTextContent(token.text);
 
-    nextOperator(parsedToken);
+    if (selectedFieldIndex) {
+      optionSelected(parsedToken, selectedFieldIndex);
+    }
 
     // // replace field or value
     // if (selectedFieldIndex !== null) {
@@ -201,6 +203,7 @@ export const Searchbar = () => {
 
         {selectingOption !== null && (
           <>
+            {/*TODO: Make click mask work with multiple elements*/}
             {/*<div className="search-click-mask" onClick={closeOptions} />*/}
             <SearchBarOptions
               options={options}

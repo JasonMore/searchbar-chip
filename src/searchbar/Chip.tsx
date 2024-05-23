@@ -85,7 +85,6 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
 
     return (
       <div>
-        {/*<div className="search-click-mask" onClick={closeOptions} />*/}
         <input
           ref={ref}
           style={{ width: Math.max((token.text?.length + 1) * 9, 10) }}
@@ -99,6 +98,7 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
           autoComplete="off"
         />
 
+        {/*TODO: Add close button back*/}
         {/*<span className="chip-remove" onClick={() => removeToken(token)}>*/}
         {/*  X*/}
         {/*</span>*/}

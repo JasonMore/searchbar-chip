@@ -1,8 +1,6 @@
 import "./searchbarOptions.css";
 import type { SearchOptions } from "./types.ts";
 
-
-
 type Props = {
   options: SearchOptions[];
   selectedFieldIndex: number | null;
