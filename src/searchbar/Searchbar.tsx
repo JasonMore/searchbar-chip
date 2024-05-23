@@ -186,14 +186,13 @@ export const Searchbar = () => {
       optionSelected(parsedToken, selectedFieldIndex);
     }
 
-    closeOptions();
+    // closeOptions();
   };
 
   return (
     <div className="searchbar-container" onClick={containerClick}>
       <div ref={searchBoxRef} className="search-box">
         <span className="search-icon">🔍</span>
-
         {selectingOption !== null && (
           <>
             {/*TODO: Make click mask work with multiple elements*/}
