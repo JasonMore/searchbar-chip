@@ -1,4 +1,11 @@
-import { createRef, MouseEventHandler, useMemo, useRef, useState } from "react";
+import {
+  createRef,
+  MouseEventHandler,
+  RefObject, useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import "./Searchbar.css";
 import { SearchOptions, Token } from "./types.ts";
 import { Chip } from "./Chip.tsx";
@@ -19,7 +26,6 @@ const operators = [
 ];
 
 export const Searchbar = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
   const searchBoxRef = useRef<HTMLDivElement>(null);
   const [selectedFieldIndex, setSelectedFieldIndex] = useState<null | number>(
     null,
@@ -30,19 +36,11 @@ export const Searchbar = () => {
   >(null);
 
   const [tokenFocusIndex, setTokenFocusIndex] = useState<null | number>(null);
-
   const [tokens, setTokens] = useState<Partial<Token>[]>(mockSetTokens);
 
   // TODO: Populated by parsing table data
   const [fields, setFields] = useState<SearchOptions[]>(mockFieldOptions);
   const [values, setValues] = useState<SearchOptions[]>(mockValueOptions);
-
-  // chips
-
-  // const chipRefs = useMemo(
-  //   () => tokens.map(() => createRef<HTMLInputElement>()),
-  //   [tokens],
-  // );
 
   const chipRefs = useMemo(
     () =>
@@ -51,6 +49,15 @@ export const Searchbar = () => {
         .map(() => createRef<HTMLInputElement>()),
     [tokens.length],
   );
+
+  useEffect(() =>{
+    // hack: I'm struggling to focus the input when its newly created.
+    // so if new and last, focus it
+    if(!tokens[tokens.length-1].text){
+      chipRefs[tokens.length-1].current?.focus()
+    }
+  },[chipRefs, tokens])
+
 
   // the current list of options to show in the dropdown
   const options = selectingOption
@@ -74,7 +81,7 @@ export const Searchbar = () => {
     setSelectingOption("field");
   };
 
-  const derpderp = (token: Token) => {
+  const nextOperator = (token: Token) => {
     if (token.field && mockFields[token.field]) {
       // user has a real field set
       if (token.operator) {
@@ -126,11 +133,6 @@ export const Searchbar = () => {
 
     resetOptions();
     newToken();
-
-    // I can't remember why this needs a setTimeout to work. Rendering after useState changes?
-    setTimeout(() => {
-      inputRef?.current?.focus();
-    });
   };
 
   const endOfList = options?.length - 1;
@@ -154,7 +156,7 @@ export const Searchbar = () => {
   const updateToken = (text: string) => {
     const parsedToken = parseTextContent(text);
 
-    derpderp(parsedToken);
+    nextOperator(parsedToken);
 
     const newTokens = [
       ...tokens.slice(0, tokenFocusIndex),
@@ -170,13 +172,20 @@ export const Searchbar = () => {
 
   const newToken = () => {
     setTokens([...tokens, parseTextContent()]);
+    focusLastInput();
+  };
+
+  const focusLastInput = () => {
+    setTimeout(() => {
+      chipRefs[chipRefs.length - 1]?.current?.focus();
+    }, 25);
   };
 
   const selectOption = () => {
     const token = tokens[tokenFocusIndex];
     const parsedToken = parseTextContent(token.text);
 
-    derpderp(parsedToken);
+    nextOperator(parsedToken);
 
     // // replace field or value
     // if (selectedFieldIndex !== null) {

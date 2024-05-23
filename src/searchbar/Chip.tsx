@@ -1,6 +1,6 @@
 import "./Chip.css";
 import type { Token } from "./types.ts";
-import { ChangeEvent, forwardRef, KeyboardEvent, RefObject } from "react";
+import { ChangeEvent, forwardRef, KeyboardEvent, RefObject, useEffect } from "react";
 
 type Props = {
   token: Token;
