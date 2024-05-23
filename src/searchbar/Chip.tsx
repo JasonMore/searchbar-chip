@@ -90,6 +90,7 @@ export const Chip = forwardRef<HTMLInputElement, Props>(
         {/*<div className="search-click-mask" onClick={closeOptions} />*/}
         <input
           ref={ref}
+          style={{ width: Math.max((token.text?.length + 1) * 9, 10) }}
           className="search-input"
           type="text"
           value={token.text}

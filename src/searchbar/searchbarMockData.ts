@@ -15,22 +15,15 @@ export const mockSetTokens: Token[] = [
     operator: ":",
     value: "Jason*",
   },
-  {
-    text: "foo",
-    field: "",
-    type: "unknown",
-    operator: "unknown",
-    value: "",
-  },
 ];
 export const mockFields = {
   Stage: { type: "string" },
   PatientsReferred: { type: "number" },
   "Date of Last Interaction": { type: "date" },
-  "Name": { type: "string" },
+  Name: { type: "string" },
 };
 export const mockFieldOptions = [
-  { name: "Stage", type: "string"},
+  { name: "Stage", type: "string" },
   { name: "PatientsReferred", type: "number" },
   { name: "Date of Last Interaction", type: "date" },
   { name: "Name", type: "string" },

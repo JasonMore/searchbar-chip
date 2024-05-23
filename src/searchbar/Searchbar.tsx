@@ -1,15 +1,8 @@
-import {
-  createRef,
-  KeyboardEvent,
-  MouseEventHandler,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { createRef, MouseEventHandler, useMemo, useRef, useState } from "react";
 import "./Searchbar.css";
 import { SearchOptions, Token } from "./types.ts";
 import { Chip } from "./Chip.tsx";
-import { parseTextContent, tokenize } from "./tokenize.ts";
+import { parseTextContent } from "./tokenize.ts";
 import { SearchBarOptions } from "./SearchBarOptions.tsx";
 import {
   mockFieldOptions,
@@ -28,7 +21,6 @@ const operators = [
 export const Searchbar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const searchBoxRef = useRef<HTMLDivElement>(null);
-  // const [currentInput, setCurrentInput] = useState("");
   const [selectedFieldIndex, setSelectedFieldIndex] = useState<null | number>(
     null,
   );
@@ -46,14 +38,19 @@ export const Searchbar = () => {
   const [values, setValues] = useState<SearchOptions[]>(mockValueOptions);
 
   // chips
-  const chipRefs = useMemo(
-    () => tokens.map(() => createRef<HTMLInputElement>()),
-    [tokens],
-  );
 
-  // const tokenizeInput = (textContent: string = "") => {
-  //   setTokens(tokens.concat(tokenize(textContent, "string")));
-  // };
+  // const chipRefs = useMemo(
+  //   () => tokens.map(() => createRef<HTMLInputElement>()),
+  //   [tokens],
+  // );
+
+  const chipRefs = useMemo(
+    () =>
+      Array(tokens.length)
+        .fill(0)
+        .map(() => createRef<HTMLInputElement>()),
+    [tokens.length],
+  );
 
   // the current list of options to show in the dropdown
   const options = selectingOption
@@ -110,64 +107,14 @@ export const Searchbar = () => {
 
     if (selectingOption === "value") {
       // no return, as if selecting final value, assume they also want to immediately tokenize
-      updateToken(`${partialToken.field}${partialToken.operator}${values[optionIndex].name}`)
+      updateToken(
+        `${partialToken.field}${partialToken.operator}${values[optionIndex].name}`,
+      );
       // newToken()
       // tokenizeInput(textContent);
       closeOptions();
     }
   };
-
-  // const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
-  //   const textContent = event.currentTarget.value;
-  //   const partialToken = parseTextContent(textContent);
-  //
-  //   if (event.key === "Enter") {
-  //     event.preventDefault();
-  //
-  //     // replace field or value
-  //     if (selectedFieldIndex !== null) {
-  //       optionSelected(partialToken, selectedFieldIndex);
-  //       return;
-  //     }
-  //
-  //     // dropdown not active, user intends to set value
-  //     tokenizeInput(textContent);
-  //     closeOptions();
-  //   }
-  //
-  //   const endOfList = options?.length - 1;
-  //
-  //   if (event.key === "ArrowDown") {
-  //     event.preventDefault();
-  //
-  //     if (selectedFieldIndex === null || selectedFieldIndex === endOfList) {
-  //       return setSelectedFieldIndex(0);
-  //     }
-  //
-  //     setSelectedFieldIndex(selectedFieldIndex + 1);
-  //   }
-  //
-  //   if (event.key === "ArrowUp") {
-  //     event.preventDefault();
-  //
-  //     if (selectedFieldIndex === null || selectedFieldIndex === 0) {
-  //       return setSelectedFieldIndex(endOfList);
-  //     }
-  //
-  //     setSelectedFieldIndex(selectedFieldIndex - 1);
-  //   }
-  //
-  //   if (partialToken.field && mockFields[partialToken.field]) {
-  //     // user has a real field set
-  //     if (partialToken.operator) {
-  //       setSelectingOption("value");
-  //     } else {
-  //       setSelectingOption("operator");
-  //     }
-  //   } else {
-  //     setSelectingOption("field");
-  //   }
-  // };
 
   const onOptionClicked = (optionIndex: number) => {
     optionSelected(parseTextContent(tokens[tokenFocusIndex].text), optionIndex);
@@ -178,6 +125,7 @@ export const Searchbar = () => {
     if (event?.target !== searchBoxRef.current) return;
 
     resetOptions();
+    newToken();
 
     // I can't remember why this needs a setTimeout to work. Rendering after useState changes?
     setTimeout(() => {
@@ -248,7 +196,7 @@ export const Searchbar = () => {
 
         {selectingOption !== null && (
           <>
-            <div className="search-click-mask" onClick={closeOptions} />
+            {/*<div className="search-click-mask" onClick={closeOptions} />*/}
             <SearchBarOptions
               options={options}
               selectedFieldIndex={selectedFieldIndex}
