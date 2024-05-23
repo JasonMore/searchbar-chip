@@ -55,9 +55,18 @@ export const Searchbar = () => {
     }
   }, [chipRefs, tokens]);
 
+  const field = useMemo(() => {
+    if (tokenFocusIndex === null) return [];
+    return fields.filter((f) =>
+      f.name
+        .toLowerCase()
+        .includes(tokens[tokenFocusIndex].field?.toLowerCase() ?? ""),
+    );
+  }, [fields, tokenFocusIndex, tokens]);
+
   // the current list of options to show in the dropdown
   const options = selectingOption
-    ? { field: fields, operator: operators, value: values }[selectingOption]
+    ? { field, operator: operators, value: values }[selectingOption]
     : [];
 
   const openOptions = (index: number) => {
