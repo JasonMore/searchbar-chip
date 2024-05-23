@@ -1,5 +1,5 @@
 import "./searchbarOptions.css";
-import type { SearchOptions } from "./types.ts";
+import { SearchOptions } from "./types.ts";
 
 type Props = {
   options: SearchOptions[];
