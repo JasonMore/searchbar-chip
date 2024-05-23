@@ -1,7 +1,7 @@
 import { FieldType, Token } from "./types";
 
 export const parseTextContent = (textContent: string = ""): Partial<Token> => {
-  const match = /(?<field>\w+)?(?<operator>:[-<>]?)?(?<value>\w+)?/gi.exec(
+  const match = /(?<field>\w+)?(?<operator>:[-<>=])?(?<value>\w+)?/gi.exec(
     textContent,
   );
 
