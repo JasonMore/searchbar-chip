@@ -66,7 +66,6 @@ export const Searchbar = () => {
   const openOptions = (index: number) => {
     setTokenFocusIndex(index);
     nextOperator(tokens[index]);
-    //TODO: keep focus on input, but do not break navigating between inputs
   };
 
   const closeOptions = () => {
@@ -177,6 +176,7 @@ export const Searchbar = () => {
   };
 
   const focusLastInput = () => {
+    // hack:
     setTimeout(() => {
       chipRefs[chipRefs.length - 1]?.current?.focus();
     }, 25);
