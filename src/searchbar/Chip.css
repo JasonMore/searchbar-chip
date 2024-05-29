@@ -1,0 +1,30 @@
+.chip {
+  display: flex;
+  flex-direction: row;
+  border: solid #b9b9b9;
+  margin-left: 0.6rem;
+  border-radius: 6px;
+}
+
+.chip-valid {
+  border: solid #6c68d2;
+}
+
+.chip-text {
+  margin: 0 0.4rem 0 0.4rem ;
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.chip-remove {
+  display: flex;
+  align-items: center;
+  margin: 0 0;
+  padding: 0.25rem 0.5rem;
+  background: rgba(185, 185, 185, 0.2);
+  cursor: pointer;
+  height: 1rem;
+  width: 0.5rem;
+}

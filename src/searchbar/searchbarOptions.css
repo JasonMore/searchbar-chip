@@ -1,0 +1,29 @@
+.searchbarOptions-container {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: solid #eeeeee;
+  border-radius: 4px;
+  height: 15rem;
+  position: absolute;
+  top: 2.5rem;
+  width: 100%;
+
+  /* not sure why px was off by one*/
+  left: -1px;
+}
+
+.search-row {
+  display: flex;
+  padding: 0.75rem;
+  justify-content: space-between;
+}
+
+.search-row:hover {
+  background-color: #eeeeee;
+  cursor: pointer;
+}
+
+.search-selected {
+  background-color: #eeeeee;
+}
